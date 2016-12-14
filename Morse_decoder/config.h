@@ -1,9 +1,9 @@
 //Definieer hier de variable
 
-#define TEKST "Test tekst";
+#define TEKST "!Danny";
 #define MORSESPEED 100;
 #define LED 13;
-#define LED2 6;
+#define LED2 3;
 #define BUZZER 8;
 #define toneFr 1200;
 
