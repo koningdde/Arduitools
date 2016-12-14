@@ -1,5 +1,6 @@
 #include "MorseDot.h"
 // *** Characters to Morse Code Conversion *** //
+
 void GetChar(char tmpChar)
 {
   // Take the passed character and use a switch case to find the morse code for that character
@@ -369,7 +370,127 @@ void GetChar(char tmpChar)
     MorseDash();
     LightsOff(Spaces);
     break;
- 
+    case '?':
+    MorseDot();
+    LightsOff(elemPause);
+    MorseDot();
+    LightsOff(elemPause);
+    MorseDash();
+    LightsOff(elemPause);
+    MorseDash();
+    LightsOff(elemPause);
+    MorseDot();
+    LightsOff(elemPause);
+    MorseDot();
+    LightsOff(Spaces);
+    break;
+    case '!':
+    MorseDash();
+    LightsOff(elemPause);
+    MorseDot();
+    LightsOff(elemPause);
+    MorseDash();
+    LightsOff(elemPause);
+    MorseDot();
+    LightsOff(elemPause);
+    MorseDash();
+    LightsOff(elemPause);
+    MorseDash();
+    LightsOff(Spaces);
+    break;
+    case '-':
+    MorseDash();
+    LightsOff(elemPause);
+    MorseDot();
+    LightsOff(elemPause);
+    MorseDot();
+    LightsOff(elemPause);
+    MorseDot();
+    LightsOff(elemPause);
+    MorseDot();
+    LightsOff(elemPause);
+    MorseDash();
+    LightsOff(Spaces);
+    break;
+    case '/':
+    MorseDash();
+    LightsOff(elemPause);
+    MorseDot();
+    LightsOff(elemPause);
+    MorseDot();
+    LightsOff(elemPause);
+    MorseDash();
+    LightsOff(elemPause);
+    MorseDot();
+    LightsOff(Spaces);
+    break;
+    case ':':
+    MorseDash();
+    LightsOff(elemPause);
+    MorseDash();
+    LightsOff(elemPause);
+    MorseDash();
+    LightsOff(elemPause);
+    MorseDot();
+    LightsOff(elemPause);
+    MorseDot();
+    LightsOff(elemPause);
+    MorseDot();
+    LightsOff(Spaces);
+    break;
+    case ')':
+    MorseDash();
+    LightsOff(elemPause);
+    MorseDot();
+    LightsOff(elemPause);
+    MorseDash();
+    LightsOff(elemPause);
+    MorseDash();
+    LightsOff(elemPause);
+    MorseDot();
+    LightsOff(elemPause);
+    MorseDash();
+    LightsOff(Spaces);
+    break;
+    case '(':
+    MorseDash();
+    LightsOff(elemPause);
+    MorseDot();
+    LightsOff(elemPause);
+    MorseDash();
+    LightsOff(elemPause);
+    MorseDash();
+    LightsOff(elemPause);
+    MorseDot();
+    LightsOff(Spaces);
+    break;
+    case '=':
+    MorseDash();
+    LightsOff(elemPause);
+    MorseDot();
+    LightsOff(elemPause);
+    MorseDot();
+    LightsOff(elemPause);
+    MorseDot();
+    LightsOff(elemPause);
+    MorseDash();
+    LightsOff(Spaces);
+    break;
+    case '@':
+    MorseDot();
+    LightsOff(elemPause);
+    MorseDash();
+    LightsOff(elemPause);
+    MorseDash();
+    LightsOff(elemPause);
+    MorseDot();
+    LightsOff(elemPause);
+    MorseDash();
+    LightsOff(elemPause);
+    MorseDot();
+    LightsOff(Spaces);
+    break;
+     
     default: 
     // If a matching character was not found it will default to a blank space
     LightsOff(Spaces);      

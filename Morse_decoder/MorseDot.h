@@ -1,8 +1,4 @@
-int dotLen = 100;     // length of the morse code 'dot'
-int dashLen = dotLen * 3;    // length of the morse code 'dash'
-int elemPause = dotLen;  // length of the pause between elements of a character
-int Spaces = dotLen * 3;     // length of the spaces between characters
-int wordPause = dotLen * 7;  // length of the pause between words
+#include "config.h"
 
 // DOT
 void MorseDot()
@@ -30,3 +26,6 @@ void LightsOff(int delayTime)
   noTone(audio8);             // stop playing a tone
   delay(delayTime);             // hold in this position
 }
+
+
+
