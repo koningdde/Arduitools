@@ -14,13 +14,15 @@ void keyboardInit() {
   ack = Keyboard.read(); // another ack when self test is done
 }
 
-void keys() {
-  // get keycode and send it to the Serial
-  // read 3 scan codes per keystroke, discarding the first two
-  code = Keyboard.read(); code = Keyboard.read(); code = Keyboard.read();
-   // The scan code in each case statement on the left corresponds
+String keys() {
+  String a;
+  
+    // read 3 scan codes per keystroke, discarding the first two
+      code = Keyboard.read(); code = Keyboard.read(); code = Keyboard.read();
+
+    // The scan code in each case statement on the left corresponds
   // with the character sent to the Serial.print() function on the right:
-  switch (code) {
+    switch (code) {
     case 0x15: Serial.print("q"); break;
     case 0x16: Serial.print("l"); break;
     case 0x1a: Serial.print("y"); break;
@@ -81,4 +83,6 @@ void keys() {
     case 0x7d: Serial.print("9"); break;
     case 0x5A: Serial.println("ent"); break;
   }
-}
+  return a;
+  }
+

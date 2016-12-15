@@ -1,7 +1,7 @@
 //Definieer hier de variable
 
 #define TEKST "!Danny";
-#define MORSESPEED 100;
+#define MORSESPEED 20;
 #define LED 13;
 #define LED2 3;
 #define BUZZER 8;
