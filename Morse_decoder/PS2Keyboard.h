@@ -54,8 +54,8 @@
 #define PS2_DOWNARROW			12
 #define PS2_RIGHTARROW			21
 #define PS2_F1				5
-#define PS2_F2				0
-#define PS2_F3				0
+#define PS2_F2				6
+#define PS2_F3				4
 #define PS2_F4				0
 #define PS2_F5				0
 #define PS2_F6				0

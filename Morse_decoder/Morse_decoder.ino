@@ -1,8 +1,5 @@
 //Make your settings in config.h
 
-
-//Functie maken om zend snelheid gelijk te maken aan ontvang snelheid!
-
 #include "GetChar.h"      //Change char to dih-dah's
 #include "PS2Keyboard.h"  //For use of an ps2 keyboard
 #include "decode.h"       //Signal input decoder
@@ -51,8 +48,7 @@ void setup() {
 }
 
 // the loop routine
-void loop(){
-    
+void loop(){    
     statusled('b');   //Make nice blue light
     decoder();        //listen to signal input
            
@@ -65,34 +61,34 @@ void loop(){
       sendkeys(i);                  //Send the contains off the keyboard array to morse output
       i = 0;
     } else if (c == PS2_TAB) {
-      Serial.print("[Tab]");
+      matchSpeed();                 //Make TX speed same as RX speed
     } else if (c == PS2_ESC) {
       changecall();                 //Start loop to change call
     } else if (c == PS2_PAGEDOWN) {
-      Serial.print("[PgDn]");
+      ;
     } else if (c == PS2_PAGEUP) {
-      Serial.print("[PgUp]");
+      ;
     } else if (c == PS2_LEFTARROW) {
       ;
     } else if (c == PS2_RIGHTARROW) {
-      Serial.print("[Right]");
+      
     } else if (c == PS2_UPARROW) {
       speedup();                    //Speedup the morse
     } else if (c == PS2_DOWNARROW) {
       speeddown();                  //Speeddown the morse
     } else if (c == PS2_DELETE) {
-      Serial.print("[Del]");
+      i = i - 1;                    //Clear char
     } else if (c == PS2_F1) {
       sprintf(input,"%s",output1);
-      sendkeys(sizeof(output1));  //Send CQ
+      sendkeys(sizeof(output1));    //Send CQ
       i = 0;
     } else if (c == PS2_F2) {
       sprintf(input,"%s",output2);
-      sendkeys(sizeof(output2));  //Send F2 template
+      sendkeys(sizeof(output2));    //Send F2 template
       i = 0;
     } else if (c == PS2_F3) {
       sprintf(input,"%s",output3);
-      sendkeys(sizeof(output3));  //Send F3 template
+      sendkeys(sizeof(output3));    //Send F3 template
       i = 0;
     } else {
       // no special key, then add char to array
@@ -138,11 +134,19 @@ void speeddown(){
   delay(100);
 }
 
+//Correct al speeds to meet dotLen
 void correctspeed(){ 
   dashLen = dotLen * 3;    // length of the morse code 'dash'
   elemPause = dotLen;      // length of the pause between elements of a character
   Spaces = dotLen * 3;     // length of the spaces between characters
   wordPause = dotLen * 7;  // length of the pause between words
+}
+
+//Match TX speed to RX speed 
+void matchSpeed(){
+  dotLen = (averageDah/3); //Read avarage dash time from RX and set to TX speed
+  correctspeed();
+  Serial.println(dotLen);
 }
 
 // change color led
