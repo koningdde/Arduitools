@@ -1,62 +1,73 @@
-#include "GetChar.h"
-#include "PS2Keyboard.h"
-#include "decode.h"
-const int DataPin = 6;
-const int IRQpin =  2;
-PS2Keyboard keyboard;
-int i = 0;
-int r;
+//Make your settings in config.h
 
-//**************************************************//
-//   Type the String to Convert to Morse Code Here  //
-//**************************************************//
 
-char stringToMorseCode[] = TEKST;
-char space[] = " ";
-char output[sizeof(stringToMorseCode) + sizeof(space)];
-char input[40];
-char mycallout[] = mycall;
+//Functie maken om zend snelheid gelijk te maken aan ontvang snelheid!
+
+#include "GetChar.h"      //Change char to dih-dah's
+#include "PS2Keyboard.h"  //For use of an ps2 keyboard
+#include "decode.h"       //Signal input decoder
+const int DataPin = 6;    // Keyboard data pin
+const int IRQpin =  2;    // Keyboard clock pin
+PS2Keyboard keyboard;     //Make keyboard
+int i = 0;                //Counter for number off char
+int r;                    //Counter for number off
+
+char mycallout[] = mycall;                //Array for callsign
+char cqout[] = CQ;                        //Array for callsign
+char F2[] = TEKST2;                       //Pre defined tekst F2
+char F3[] = TEKST3;                       //Pre defined tekst F3
+char space[] = " ";                       //Space to add after char
+
+char output1[sizeof(cqout) + sizeof(mycallout) + sizeof(space)]; //Make array the size of three other array's
+char output2[sizeof(F2) + sizeof(space)];                        //Make array the sise of two other array's
+char output3[sizeof(F3) + sizeof(space)];                        //Make array the sise of two other array's
+char input[40];                                                  //Array for keyboard input
 
 // the setup routine runs once when you press reset:
 void setup() {  
-
-  keyboard.begin(DataPin, IRQpin, PS2Keymap_US);
-               
-  // initialize the digital pin as an output for LED lights.
+  //Start keyboard
+  keyboard.begin(DataPin, IRQpin, PS2Keymap_US);               
+  // initialize the digital pins.
   pinMode(led12, OUTPUT); 
   pinMode(led6, OUTPUT);
   pinMode(audioPin, INPUT); 
   pinMode(ledr, OUTPUT); 
   pinMode(ledg, OUTPUT); 
   pinMode(ledb, OUTPUT); 
+  //Begin serial communication
   Serial.begin(9600);
-  sprintf(output,"%s%s",stringToMorseCode,space);
-  statusled('r');
+  //Combine arrays to usefull arrays you can send
+  sprintf(output1,"%s%s%s",cqout,mycallout,space);  //Add three array's together
+  sprintf(output2,"%s%s",output2,space);            //Add two array's together 
+  sprintf(output3,"%s%s",output3,space);            //Add two array's together 
+  //Showoff rgb led
+  statusled('r'); //change led to red
   delay(350);
-  statusled('g');
+  statusled('g'); //change led to green
   delay(350);
-  statusled('b');
+  statusled('b'); //change led to blue
   delay(350);
-  
+//End of setup  
 }
-// Create a loop of the letters/words you want to output in morse code (defined in string at top of code)
+
+// the loop routine
 void loop(){
     
-    statusled('b');
-    decoder();
+    statusled('b');   //Make nice blue light
+    decoder();        //listen to signal input
            
-    if (keyboard.available()) {
+    if (keyboard.available()) {  //Tis is an interrupt !
     // read the next key
     char c = keyboard.read();
-    
+   
     // check for some of the special keys
     if (c == PS2_ENTER) {
-      sendkeys(i);
+      sendkeys(i);                  //Send the contains off the keyboard array to morse output
       i = 0;
     } else if (c == PS2_TAB) {
       Serial.print("[Tab]");
     } else if (c == PS2_ESC) {
-      Serial.print("[ESC]");
+      changecall();                 //Start loop to change call
     } else if (c == PS2_PAGEDOWN) {
       Serial.print("[PgDn]");
     } else if (c == PS2_PAGEUP) {
@@ -66,23 +77,30 @@ void loop(){
     } else if (c == PS2_RIGHTARROW) {
       Serial.print("[Right]");
     } else if (c == PS2_UPARROW) {
-      speedup();
+      speedup();                    //Speedup the morse
     } else if (c == PS2_DOWNARROW) {
-      speeddown();
+      speeddown();                  //Speeddown the morse
     } else if (c == PS2_DELETE) {
       Serial.print("[Del]");
     } else if (c == PS2_F1) {
-      sprintf(input,"%s",mycallout);
-      sendkeys(sizeof(mycallout));
+      sprintf(input,"%s",output1);
+      sendkeys(sizeof(output1));  //Send CQ
+      i = 0;
+    } else if (c == PS2_F2) {
+      sprintf(input,"%s",output2);
+      sendkeys(sizeof(output2));  //Send F2 template
+      i = 0;
+    } else if (c == PS2_F3) {
+      sprintf(input,"%s",output3);
+      sendkeys(sizeof(output3));  //Send F3 template
       i = 0;
     } else {
- 
-      // otherwise, just print all normal characters
+      // no special key, then add char to array
       input[i] = c;
       i = i + 1;
      }
   }
-        
+//End of loop       
 }
 
 void sendkeys(int a) {
@@ -122,11 +140,12 @@ void speeddown(){
 
 void correctspeed(){ 
   dashLen = dotLen * 3;    // length of the morse code 'dash'
-  elemPause = dotLen;  // length of the pause between elements of a character
+  elemPause = dotLen;      // length of the pause between elements of a character
   Spaces = dotLen * 3;     // length of the spaces between characters
   wordPause = dotLen * 7;  // length of the pause between words
 }
 
+// change color led
 void statusled(char color){
   switch (color) {
     case 'r':
@@ -144,9 +163,32 @@ void statusled(char color){
     digitalWrite(ledg, LOW);
     digitalWrite(ledb, HIGH);
     break;
-}
+  }
 }
 
+void changecall(){
+  boolean hold = true;
+  i = 0;
+  while(hold){
+    if (keyboard.available()) {
+    // read the next key
+    char c = keyboard.read();
+   
+    // check for some of the special keys
+      if (c == PS2_ENTER) {
+        hold = false;
+    } else {
+      // no special key, then add char to array
+      mycallout[i] = c;
+      i = i + 1;
+     }
+    }
+   output1[sizeof(cqout) + sizeof(mycallout) + sizeof(space)];  //Change array to new size
+   sprintf(output1,"%s%s%s",cqout,mycallout,space);             //Add three array's together
+  }
+}
+
+//morse tone decoder
  void decoder() {
    audio = digitalRead(audioPin); // What is the tone decoder doing?
 
@@ -158,8 +200,7 @@ void statusled(char color){
    // The decoder is detecting our tone
    // The LEDs on the decoder and Arduino will blink on in unison
    digitalWrite(13,1);            // turn on Arduino's LED
-   
-   
+     
    if (startUpTime>0){
      // We only need to do once, when the key first goes down
      startUpTime=0;    // clear the 'Key Up' timer
@@ -397,7 +438,6 @@ void truncateOverFlow(){
      currentLine[i] = ' ';   // This space goes in our array
   }
 }
-
 
 void linePrep(){
      LCDline++;           // This is our line number, we make it one higher

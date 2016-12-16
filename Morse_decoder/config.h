@@ -1,15 +1,20 @@
-//Definieer hier de variable
+//Define your settings
 
-#define TEKST "!Danny";
-#define MORSESPEED 100;
-#define LED 13;
-#define LED2 3;
-#define BUZZER 5;
-#define toneFr 1200;
-#define mycall "PD1DDK";
-#define red 11;
-#define green 10;
-#define bleu 9;
+#define mycall "PD1DDK";          //Your callsign F1
+#define CQ "CQCQ";                //Define number of CQ
+#define TEKST2 "Mobile station";  //Template tekst F2
+#define TEKST3 "OM name Danny";   //Template tekst F3
+#define MORSESPEED 100;   //Initial dot lenght
+#define LED 13;           //Output pin to morse
+#define LED2 3;           //Morse output to led
+#define BUZZER 5;         //Pin to connect internal buzzer
+#define toneFr 1200;      //Internal buzzer tone freq
+#define red 11;           //Red pin rgb led
+#define green 10;         //Green pin rgb led
+#define bleu 9;           //Blue pin rgb led
+#define decoderpin 8;     //For connect the output from de tone decoder
+
+//End off settings
 
 // Create variable to define the output pins
 int led12 = LED;      // blink an led on output 12
@@ -20,6 +25,7 @@ int ledg = green;        // blink an led on output 6
 int ledb = bleu;        // blink an led on output 6
 int note = toneFr;      // music note/pitch
 
+//Define morse protocol standards
 int dotLen = MORSESPEED;     // length of the morse code 'dot'
 int dashLen = dotLen * 3;    // length of the morse code 'dash'
 int elemPause = dotLen;  // length of the pause between elements of a character

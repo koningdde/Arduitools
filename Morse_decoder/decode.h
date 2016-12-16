@@ -1,7 +1,6 @@
 
-int audioPin = 8;         // we read data from the tone detector module here
+int audioPin = decoderpin;// we read data from the tone detector module here
 int audio = 1;            // will store the value we read on this pin
-
 int LCDline = 1;          // keeps track of which line we're printing on
 int lineEnd = 21;         // One more than number of characters across display
 int letterCount = 0;      // keeps track of how may characters were printed on the line
