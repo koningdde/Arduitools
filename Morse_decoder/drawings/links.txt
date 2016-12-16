@@ -1,0 +1,6 @@
+Keyboard hex codes:
+http://www.computer-engineering.org/ps2keyboard/scancodes2.html
+online tone generator:
+http://onlinetonegenerator.com/
+ps2 lib:
+http://www.pjrc.com/teensy/td_libs_PS2Keyboard.html
