@@ -43,7 +43,7 @@ void setup()
   MFS.initialize(&Timer1);
   
   MFS.blinkDisplay(DIGIT_ALL);
-  //MFS.beep(500);
+  MFS.beep(500);
 }
 
 
