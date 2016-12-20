@@ -1,4 +1,4 @@
-//Make your settings in config.h
+//Make your settings only in config.h
 
 #include "GetChar.h"      //Change char to dih-dah's
 #include "PS2Keyboard.h"  //For use of an ps2 keyboard
