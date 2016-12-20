@@ -1,5 +1,6 @@
 //Make your settings only in config.h
 
+#include "Arduino.h"      //Define default
 #include "GetChar.h"      //Change char to dih-dah's
 #include "PS2Keyboard.h"  //For use of an ps2 keyboard
 #include "decode.h"       //Signal input decoder
