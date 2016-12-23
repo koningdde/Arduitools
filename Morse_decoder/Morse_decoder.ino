@@ -15,11 +15,14 @@ char cqout[] = CQ;                        //Array for callsign
 char F2[] = TEKST2;                       //Pre defined tekst F2
 char F3[] = TEKST3;                       //Pre defined tekst F3
 char space[] = " ";                       //Space to add after char
+char k[] = "k";                           //Over
+char sk[] = "sk";                         //Close connection
+char cl[] = "73";                         //Greetings
 
-char output1[sizeof(cqout) + sizeof(mycallout) + sizeof(space)]; //Make array the size of three other array's
-char output2[sizeof(F2) + sizeof(space)];                        //Make array the sise of two other array's
-char output3[sizeof(F3) + sizeof(space)];                        //Make array the sise of two other array's
-char input[40];                                                  //Array for keyboard input
+char output1[sizeof(cqout) + sizeof(space) + sizeof(mycallout) + sizeof(space) + sizeof(k) + sizeof(space)]; //Make cqcq
+char output2[sizeof(F2) + sizeof(space)];                                        //Make array the sise of two other array's
+char output3[sizeof(F3) + sizeof(space)];                                        //Make array the sise of two other array's
+char input[40];                                                                  //Array for keyboard input
 
 // the setup routine runs once when you press reset:
 void setup() {  
@@ -35,9 +38,9 @@ void setup() {
   //Begin serial communication
   Serial.begin(9600);
   //Combine arrays to usefull arrays you can send
-  sprintf(output1,"%s%s%s",cqout,mycallout,space);  //Add three array's together
-  sprintf(output2,"%s%s",output2,space);            //Add two array's together 
-  sprintf(output3,"%s%s",output3,space);            //Add two array's together 
+  sprintf(output1,"%s%s%s%s%s%s",cqout,space,mycallout,space,k,space);  //Add three array's together
+  sprintf(output2,"%s%s",F2,space);            //Add two array's together 
+  sprintf(output3,"%s%s",F3,space);            //Add two array's together 
   //Showoff rgb led
   statusled('r'); //change led to red
   delay(350);
@@ -123,6 +126,7 @@ void speedup(){
   statusled('g');
   dotLen = dotLen - 10;     // length of the morse code 'dot'
   correctspeed();
+  Serial.print("Speed is: ");
   Serial.println(dotLen);
   delay(100);
 }
@@ -131,6 +135,7 @@ void speeddown(){
   statusled('g');
   dotLen = dotLen + 10;     // length of the morse code 'dot'
   correctspeed();
+  Serial.print("Speed is: ");
   Serial.println(dotLen);
   delay(100);
 }
@@ -145,9 +150,12 @@ void correctspeed(){
 
 //Match TX speed to RX speed 
 void matchSpeed(){
+  statusled('g');   //Make nice blue light
   dotLen = (averageDah/3); //Read avarage dash time from RX and set to TX speed
   correctspeed();
+  Serial.print("Speed is: ");
   Serial.println(dotLen);
+  delay(100);
 }
 
 // change color led
@@ -172,8 +180,10 @@ void statusled(char color){
 }
 
 void changecall(){
+  statusled('g');
   boolean hold = true;
   i = 0;
+  Serial.println("Change call:");
   while(hold){
     if (keyboard.available()) {
     // read the next key
@@ -188,9 +198,11 @@ void changecall(){
       i = i + 1;
      }
     }
-   output1[sizeof(cqout) + sizeof(mycallout) + sizeof(space)];  //Change array to new size
-   sprintf(output1,"%s%s%s",cqout,mycallout,space);             //Add three array's together
   }
+   output1[sizeof(cqout) + sizeof(space) + sizeof(mycallout) + sizeof(space) + sizeof(k) + sizeof(space)];  //Change array to new size
+   sprintf(output1,"%s%s%s%s%s%s",cqout,space,mycallout,space,k,space);                                     //Make new CQ
+   Serial.print("call is: ");
+   Serial.println(mycallout);
 }
 
 //morse tone decoder
@@ -532,5 +544,3 @@ void reprintOverFlow(){
   lastSpace=0;          // clear the last space pointer
   lastWordCount=0;      // clear the last word length
 }
-
-

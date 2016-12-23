@@ -1,9 +1,9 @@
 //Define your settings
 
 #define mycall "PD1DDK";          //Your callsign F1
-#define CQ "CQCQ";                //Define number of CQ
+#define CQ "CQ CQ";                //Define number of CQ
 #define TEKST2 "Mobile station";  //Template tekst F2
-#define TEKST3 "OM name Danny";   //Template tekst F3
+#define TEKST3 "My name is Danny";   //Template tekst F3
 #define MORSESPEED 100;           //Initial dot lenght
 #define LED 13;                   //Output pin to morse
 #define LED2 3;                   //Morse output to led
