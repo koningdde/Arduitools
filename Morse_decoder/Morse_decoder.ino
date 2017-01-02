@@ -216,7 +216,7 @@ void changecall(){
  void keyIsDown() {
    // The decoder is detecting our tone
    // The LEDs on the decoder and Arduino will blink on in unison
-   digitalWrite(13,1);            // turn on Arduino's LED
+   //digitalWrite(13,1);            // turn on Arduino's LED
      
    if (startUpTime>0){
      // We only need to do once, when the key first goes down
@@ -239,7 +239,7 @@ void changecall(){
   void keyIsUp() {
    // The decoder does not detect our tone
    // The LEDs on the decoder and Arduino will blink off in unison 
-   digitalWrite(13,0);    // turn off Arduino's LED
+   //digitalWrite(13,0);    // turn off Arduino's LED
    
    // If we haven't already started our timer, do it now
    if (startUpTime == 0){startUpTime = millis();}
