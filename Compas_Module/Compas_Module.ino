@@ -1,6 +1,7 @@
 
 #include "ledDisplay.h"
 #include "config.h"
+#include "showoffLed.h"
 #include <Wire.h>
 #include <HMC5883L.h>
 #include <MPU6050.h>
@@ -35,30 +36,19 @@ void setup() {
 
   // Set measurement range
   compass.setRange(HMC5883L_RANGE_1_3GA);
-
   // Set measurement mode
   compass.setMeasurementMode(HMC5883L_CONTINOUS);
-
   // Set data rate
   compass.setDataRate(HMC5883L_DATARATE_30HZ);
-
   // Set number of samples averaged
   compass.setSamples(HMC5883L_SAMPLES_8);
-
   // Set calibration offset. See HMC5883L_calibration.ino
   compass.setOffset(0, 0); 
 
-
 //Showoff led display  
-  for (int j = 0; j < 16; j++){
-    registerWrite(windRichting[j]);
-    delay(100);
-  }
-  
-  registerWrite(255); //all led on
-  delay(500);
-  registerWrite(0); //all led off
-}
+ledShow();
+
+} //End of setup
 
 
 void loop() {
@@ -67,25 +57,22 @@ void loop() {
   Vector acc = mpu.readScaledAccel();  
 
   // Calculate heading1s
-  heading1 = tiltCompensate(mag, acc);
-  
-  heading1 += declinationAngle;
-  
+  heading1 = tiltCompensate(mag, acc);  
+  heading1 += declinationAngle;  
   // Correct for heading1 < 0deg and heading1 > 360deg
   heading1 = correctAngle(heading1);
-
   // Convert to degrees
   heading1 = heading1 * 180/M_PI; 
 
   // Output
-  Serial.println(heading1);
+  //Serial.println(heading1);
   showLedDisplay(heading1);
 
-  delay(100);
+  delay(100); //slow down
   
-  }
+} //End of main loop
 
-     // Tilt compensation
+// Tilt compensation
 float tiltCompensate(Vector mag, Vector normAccel)
 {
   // Pitch & Roll 

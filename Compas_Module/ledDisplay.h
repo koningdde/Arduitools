@@ -10,14 +10,14 @@ void registerWrite(int whichPin) {
   // turn off the output so the pins don't light up
   // while you're shifting bits:
   digitalWrite(latchPin, LOW);
-  delay(5);
+  delay(5); //little delay to drop led flickering
   // shift the bits out:
   shiftOut(dataPin, clockPin, MSBFIRST, (whichPin));
   // turn on the output so the LEDs can light up:
   digitalWrite(latchPin, HIGH);
 }
 
-
+//Write heading from compas to led display
 void showLedDisplay(int headingDegrees) {
 
   if (headingDegrees < 0 || headingDegrees > 360) {
