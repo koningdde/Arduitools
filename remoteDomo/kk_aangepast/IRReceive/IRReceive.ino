@@ -18,16 +18,20 @@ void setup() {
 void loop() {
   // put your main code here, to run repeatedly:
 if (My_Receiver.GetResults(&My_Decoder)) {
+       My_Receiver.resume();
        My_Decoder.decode();
-       Serial.print("decode");
+       digitalWrite(12, HIGH);
+       Serial.println("decode");
        if(My_Decoder.decode_type==MY_PROTOCOL) {
           switch(My_Decoder.value) {
           case BUTTON_0:    digitalWrite(13, HIGH); break;
           case BUTTON_1:    digitalWrite(13, LOW); break;
           }
+
 }
 delay(100);
 digitalWrite(13, LOW);
+digitalWrite(12, LOW);
 
 }
 }

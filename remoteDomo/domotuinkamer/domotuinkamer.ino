@@ -1,21 +1,25 @@
 // Library's
+#include <Wire.h>
+#include <Adafruit_BMP085.h>
 #include <SPI.h>
 #include <Ethernet.h>
 #include <PubSubClient.h>
+Adafruit_BMP085 bmp;
+#define clientId "tuinkamer"
 
 // Network settings
-byte mac[]    = {  0xDE, 0xED, 0xBA, 0xFE, 0xFE, 0xED };
-IPAddress ip(192, 168, 100, 201);
+byte mac[]    = {  0xDE, 0xED, 0xBA, 0xFE, 0xFE, 0xCC };
+IPAddress ip(192, 168, 100, 200);
 IPAddress server(192, 168, 100, 54);
 
 //Variables
-char unitId = '1'; //Unit id
-int idx1 = 24; //IDX number for domoticz
-int idx2 = 25;
-int idx3 = 26;
-int idx4 = 27;
-float data1 = 1.0; //Datapoint
-float data2 = 1.0;
+char unitId = '0'; //Unit id
+int idx1 = 13; //IDX number for domoticz
+int idx2 = 20;
+int idx3 = 21;
+int idx4 = 22;
+float data1 = 0.0; //Datapoint
+float data2 = 0;
 float data3 = 0.0;
 float data4 = 0.0;
 int relay4 = 22; //Hardwire output
@@ -24,7 +28,7 @@ int relay1 = 26; //Hardwire output
 int relay2 = 34; //Hardwire output
 
 unsigned long last;
-unsigned long interval = (60000); //Interval to send sensor data
+unsigned long interval = (600000); //Interval to send sensor data
 
 EthernetClient ethClient;
 PubSubClient client(ethClient);
@@ -109,15 +113,16 @@ void sensorDataout(int idx, float data){
       //char data2[] ={"\{\"command\": \"switchlight\", \"idx\": 14, \"switchcmd\": \"Off\", \"level\": 100\}"};
       client.publish("domoticz/in",output);
       // ... and resubscribe
-      client.subscribe("domoticz/arduino"); 
+      client.subscribe("domoticz/arduino");
+
+  
 }
 void reconnect() {
   // Loop until we're reconnected
-  
   while (!client.connected()) {
     Serial.print("Attempting MQTT connection...");
     // Attempt to connect
-    if (client.connect("arduinoClient")) {
+    if (client.connect(clientId)) {
       Serial.println("connected");
       client.subscribe("domoticz/arduino");       
     } else {
@@ -132,10 +137,11 @@ void reconnect() {
 
 void setup()
 {
-  //if (!bmp.begin()) {
-  //Serial.println("Could not find a valid BMP085 sensor, check wiring!");
-  //while (1) {}
-  //}
+  if (!bmp.begin()) {
+  Serial.println("Could not find a valid BMP085 sensor, check wiring!");
+  while (1) {}
+  }
+
   pinMode(relay1, OUTPUT);
   pinMode(relay2, OUTPUT);
   pinMode(relay3, OUTPUT);
@@ -155,10 +161,9 @@ void loop()
     reconnect();
   }
   client.loop();
-
   if ((millis() - last) >= interval){ //To start sending sensordata
-    //data1 = bmp.readTemperature();
-    //data2 = (bmp.readPressure()/100);
+    data1 = bmp.readTemperature();
+    data2 = ((bmp.readPressure()/100));
     sensorDataout(idx1, data1);
     sensorDataout(idx2, data2);
     //sensorDataout(idx3, data3);
