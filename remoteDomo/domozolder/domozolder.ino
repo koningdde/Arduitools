@@ -2,8 +2,24 @@
 #include <SPI.h>
 #include <Ethernet.h>
 #include <PubSubClient.h>
+
+#include <OneWire.h>
+#include <DallasTemperature.h>
+#define ONE_WIRE_BUS_1 5
+#define ONE_WIRE_BUS_2 6
+
+OneWire oneWire_1(ONE_WIRE_BUS_1);
+OneWire oneWire_2(ONE_WIRE_BUS_2);
+
+DallasTemperature sensor_1(&oneWire_1);
+DallasTemperature sensor_2(&oneWire_2);
+
 #include "kkino.h"
 #define clientId "zolder"
+
+#include <dht.h>
+dht DHT;
+#define DHT11_PIN 2
 
 // Network settings
 byte mac[]    = {  0xDE, 0xED, 0xBA, 0xFE, 0xFA, 0xBB };
@@ -14,12 +30,12 @@ IPAddress server(192, 168, 100, 54);
 char unitId = '1'; //Unit id, tbv ontvangst paketten
 int idx1 = 24; //IDX number for domoticz
 int idx2 = 25;
-int idx3 = 26;
-int idx4 = 27;
-float data1 = 1.0; //Datapoint
-float data2 = 1.0;
-float data3 = 0.0;
-float data4 = 0.0;
+int idx3 = 42;
+//int idx4 = 39;
+float data1; //Datapoint
+float data2;
+float data3;
+float data4;
 int relay4 = 9; //Hardwire output
 int relay3 = 8; //Hardwire output
 int relay1 = 4; //Hardwire output
@@ -101,12 +117,55 @@ void relayOut(char relay, char state){
     break;   
   }
 }
-void sensorDataout(int idx, float data){
+void sensorDataout(int idx, float data, int data2){
       Serial.println("Sending data....");
       String string = " { \"idx\" : ";
       string.concat(idx);
-      string.concat(", \"nvalue\" : 0, \"svalue\" : \"");
+      string.concat(", \"nvalue\" : ");
+      string.concat(data2);
+      string.concat(", \"svalue\" : \"");
       string.concat(data);
+      string.concat("\" \}");
+      Serial.println(string);
+      char output[80];
+      string.toCharArray(output, 80);
+      //char data2[] ={"\{\"command\": \"switchlight\", \"idx\": 14, \"switchcmd\": \"Off\", \"level\": 100\}"};
+      client.publish("domoticz/in",output);
+      // ... and resubscribe
+      client.subscribe("domoticz/arduino"); 
+}
+
+void sensorDataoutint(int idx, int data, int data2){
+      Serial.println("Sending data....");
+      String string = " { \"idx\" : ";
+      string.concat(idx);
+      //string.concat(", \"nvalue\" : 0, \"svalue\" : \"");
+      string.concat(", \"nvalue\" : ");
+      string.concat(data2);
+      string.concat(", \"svalue\" : \"");
+      string.concat(data);
+      string.concat("\" \}");
+      Serial.println(string);
+      char output[80];
+      string.toCharArray(output, 80);
+      //char data2[] ={"\{\"command\": \"switchlight\", \"idx\": 14, \"switchcmd\": \"Off\", \"level\": 100\}"};
+      client.publish("domoticz/in",output);
+      // ... and resubscribe
+      client.subscribe("domoticz/arduino"); 
+}
+
+void sensorDataouthum(int idx, int data, int data2){
+      Serial.println("Sending data....");
+      String string = " { \"idx\" : ";
+      string.concat(idx);
+      //string.concat(", \"nvalue\" : 0, \"svalue\" : \"");
+      string.concat(", \"nvalue\" : ");
+      string.concat(1);
+      string.concat(", \"svalue\" : \"");
+      string.concat(data);
+      string.concat(";");
+      string.concat(data2);
+      string.concat(";0");
       string.concat("\" \}");
       Serial.println(string);
       char output[80];
@@ -166,6 +225,8 @@ void setup()
   last = millis();
   kk_init();
   delay(1500); 
+  sensor_1.begin();
+  sensor_2.begin();
 }
 
 void loop()
@@ -176,12 +237,25 @@ void loop()
   client.loop();
 
   if ((millis() - last) >= interval){ //To start sending sensordata
-    //data1 = bmp.readTemperature();
-    //data2 = (bmp.readPressure()/100);
-    sensorDataout(idx1, data1);
-    sensorDataout(idx2, data2);
-    //sensorDataout(idx3, data3);
-    //sensorDataout(idx4, data4);
+  
+    sensor_1.requestTemperatures();
+    sensor_2.requestTemperatures();
+    data1 = (sensor_1.getTempCByIndex(0));
+    data2 = (sensor_2.getTempCByIndex(0));
+    //Serial.println(data1);
+    //Serial.println(data2);
+    int chk = DHT.read11(DHT11_PIN);
+    
+    data3 = (DHT.humidity);
+    data4 = (DHT.temperature);
+    sensorDataout(idx1, data1, 0);
+    sensorDataout(idx2, data2, 0);
+
+    
+    if ((data3 > -10) && (data3 < 100)) { //hum + temp out
+    sensorDataouthum(idx3, data4, (int) data3);
+    }
+    
     last = millis();   
   }
 
@@ -197,16 +271,19 @@ void loop()
     Serial.print("D: "); 
     Serial.println(dimlevel);
     
-    if (address == 12509470) {
+    if (address == 25711616) {
       switch (onoff) {
         case 0:   
         Serial.print("OFF");
-        lightOut(26,"Off"); //idx 26, uit, sturen naar domoticz
+        lightOut(37,"Off"); //idx 26, uit, sturen naar domoticz
+        
         break;
         case 1:
         Serial.print("ON");
-        lightOut(26,"On"); //idx 26, aan, sturen naar domoticz
+        lightOut(37,"On"); //idx 26, aan, sturen naar domoticz
+        
         break;
+
       }
     }
   }
@@ -215,12 +292,5 @@ void loop()
   inbuf[i++] = c; 
   }
 }
-
-
-
-
-
-
-
 
 

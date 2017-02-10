@@ -48,7 +48,7 @@ extern void kk_statehandler(void);
 #define KK_MIN_REC_IDENT_FRAMES  2  /* receive at least two identical frames to qulaify input */
 
 #define KK_RXPIN   3 /* Arduino input pin, for receiver */
-#define KK_TXPIN   5 /* Arduino output pin for transmitter */
+#define KK_TXPIN   7/* Arduino output pin for transmitter */
 #define KK_MODEPIN 8 /* only used if KK_RXPIN == KK_TXPIN */
 #define KK_USELED    /* Led is used for diagnostic purposes */
 #define KK_LEDPIN 13 /* Arduino pin for LED */ 
