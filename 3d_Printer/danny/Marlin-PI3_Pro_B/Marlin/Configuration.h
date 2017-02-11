@@ -292,7 +292,7 @@ your extruder heater takes 2 minutes to hit the target on heating.
 // The pullups are needed if you directly connect a mechanical endswitch between the signal and ground pins.
 const bool X_MIN_ENDSTOP_INVERTING = false; // set to true to invert the logic of the endstop.
 const bool Y_MIN_ENDSTOP_INVERTING = false; // set to true to invert the logic of the endstop.
-const bool Z_MIN_ENDSTOP_INVERTING = false; // set to true to invert the logic of the endstop.
+const bool Z_MIN_ENDSTOP_INVERTING = true; // set to true to invert the logic of the endstop.
 const bool X_MAX_ENDSTOP_INVERTING = false; // set to true to invert the logic of the endstop.
 const bool Y_MAX_ENDSTOP_INVERTING = false; // set to true to invert the logic of the endstop.
 const bool Z_MAX_ENDSTOP_INVERTING = false; // set to true to invert the logic of the endstop.
@@ -334,9 +334,9 @@ const bool Z_MAX_ENDSTOP_INVERTING = false; // set to true to invert the logic o
 #define max_software_endstops true  // If true, axis won't move to coordinates greater than the defined lengths below.
 
 // Travel limits after homing
-#define X_MAX_POS 210
+#define X_MAX_POS 200
 #define X_MIN_POS 0
-#define Y_MAX_POS 210
+#define Y_MAX_POS 190
 #define Y_MIN_POS 0
 #define Z_MAX_POS 180
 #define Z_MIN_POS 0
@@ -373,7 +373,7 @@ const bool Z_MAX_ENDSTOP_INVERTING = false; // set to true to invert the logic o
     // set the rectangle in which to probe
     #define LEFT_PROBE_BED_POSITION 15
     #define RIGHT_PROBE_BED_POSITION 170
-    #define BACK_PROBE_BED_POSITION 180
+    #define BACK_PROBE_BED_POSITION 160
     #define FRONT_PROBE_BED_POSITION 20
 
      // set the number of grid points per dimension
@@ -386,7 +386,7 @@ const bool Z_MAX_ENDSTOP_INVERTING = false; // set to true to invert the logic o
     // is used to esimate the plane of the print bed
 
       #define ABL_PROBE_PT_1_X 15
-      #define ABL_PROBE_PT_1_Y 180
+      #define ABL_PROBE_PT_1_Y 170
       #define ABL_PROBE_PT_2_X 15
       #define ABL_PROBE_PT_2_Y 20
       #define ABL_PROBE_PT_3_X 170
@@ -397,8 +397,8 @@ const bool Z_MAX_ENDSTOP_INVERTING = false; // set to true to invert the logic o
 
   // these are the offsets to the probe relative to the extruder tip (Hotend - Probe)
   // X and Y offsets must be integers
-  #define X_PROBE_OFFSET_FROM_EXTRUDER -25
-  #define Y_PROBE_OFFSET_FROM_EXTRUDER -29
+  #define X_PROBE_OFFSET_FROM_EXTRUDER -30
+  #define Y_PROBE_OFFSET_FROM_EXTRUDER -32
   #define Z_PROBE_OFFSET_FROM_EXTRUDER -12.35
 
   #define Z_RAISE_BEFORE_HOMING 4       // (in mm) Raise Z before homing (G28) for Probe Clearance.
