@@ -1,0 +1,180 @@
+{\rtf1\ansi\ansicpg1252\cocoartf1504\cocoasubrtf600
+{\fonttbl\f0\fnil\fcharset0 LucidaGrande;\f1\fnil\fcharset0 LucidaGrande-Bold;\f2\fnil\fcharset0 Monaco;
+}
+{\colortbl;\red255\green255\blue255;\red38\green38\blue38;\red218\green230\blue239;\red255\green255\blue255;
+\red255\green255\blue255;\red16\green63\blue118;\red39\green123\blue69;}
+{\*\expandedcolortbl;\csgray\c100000;\cssrgb\c20000\c20000\c20000;\cssrgb\c88235\c92157\c94902;\csgray\c100000;
+\cssrgb\c100000\c100000\c100000;\cssrgb\c6275\c32157\c53725;\cssrgb\c18039\c54510\c34118;}
+\paperw11900\paperh16840\margl1440\margr1440\vieww10800\viewh8400\viewkind0
+\deftab720
+\pard\pardeftab720\partightenfactor0
+
+\f0\fs26 \cf2 \cb3 \expnd0\expndtw0\kerning0
+Thanks pixal, it is solved now \cb4 {{\NeXTGraphic icon_e_biggrin.gif \width300 \height340 \noorient
+}¬}\cb3  When Domoticz is not working it now automatically restarts and sends a message to my phone via pushover to let me know that it crashed and has restarted.\cb4 \
+\
+\cb3 Step by step i have done the following:\cb4 \
+\
+\cb3 Go to home/pi then \cb4 \
+\pard\pardeftab720\partightenfactor0
+
+\f1\b\fs20\fsmilli10400 \cf2 \cb5 CODE: \cf6 \uc0\u8234 SELECT ALL\cf2 \cb4 \uc0\u8236 \
+\pard\pardeftab720\partightenfactor0
+
+\f2\b0\fs23\fsmilli11700 \cf7 \cb5 nano auto_restart_domoticz.sh\cb4 \
+\pard\pardeftab720\partightenfactor0
+
+\f0\fs26 \cf2 \
+\
+\cb3 The above creates a new file, paste the following code in it (make sure you enter your IP and port number at the top) and save it with Ctrl+X\cb4 \
+\pard\pardeftab720\partightenfactor0
+
+\f1\b\fs20\fsmilli10400 \cf2 \cb5 CODE: \cf6 \uc0\u8234 SELECT ALL\cf2 \cb4 \uc0\u8236 \
+\pard\pardeftab720\partightenfactor0
+
+\f2\b0\fs23\fsmilli11700 \cf7 \cb5 #!/bin/bash\cb4 \
+\cb5 #Credits go to Egregius\cb4 \
+\cb5 ip=ENTER YOUR IP HERE\cb4 \
+\cb5 port=ENTER YOUR PORT NUBMER HERE\cb4 \
+\cb5 idx=1\cb4 \
+\cb5 logfile='/var/log/auto_restart_domoticz.log'\cb4 \
+\
+\
+\cb5 function jsonValue() \{\cb4 \
+\cb5 \'a0 \'a0KEY=$1\cb4 \
+\cb5 \'a0 \'a0num=$2\cb4 \
+\cb5 \'a0 \'a0awk -F"[,:\}]" '\{for(i=1;i<=NF;i++)\{if($i~/'$KEY'\\042/)\{print $(i+1)\}\}\}' | tr -d '"' | sed -n $\{num\}p\cb4 \
+\cb5 \}\cb4 \
+\
+\cb5 DOMOTICZ=`curl -s --connect-timeout 2 --max-time 5 "http://$ip:$port/json.htm?type=devices&rid=$$idx"`\cb4 \
+\cb5 #echo $DOMOTICZ\cb4 \
+\cb5 STATUS=$(echo $DOMOTICZ | jsonValue status 1)\cb4 \
+\cb5 if [ -z "$STATUS" ]; then STATUS="NOK"; fi\cb4 \
+\cb5 echo Domoticz status = $STATUS\cb4 \
+\cb5 if [ $STATUS = 'OK' ] ; then\cb4 \
+\cb5 \'a0 \'a0exit\cb4 \
+\cb5 else\cb4 \
+\cb5 \'a0 \'a0STAMP=$(date +"%Y-%m-%d %H:%M:%S")\cb4 \
+\cb5 \'a0 \'a0echo $STAMP NOK rechecking... >> $logfile\cb4 \
+\cb5 \'a0 \'a0echo Domoticz status NOK, checking again in 5 seconds...\cb4 \
+\cb5 \'a0 \'a0sleep 5\cb4 \
+\cb5 \'a0 \'a0DOMOTICZ=`curl -s --connect-timeout 2 --max-time 5 "http://$ip:$port/json.htm?type=devices&rid=$$idx"`\cb4 \
+\cb5 \'a0 \'a0STATUS2=$(echo $DOMOTICZ | jsonValue status 1)\cb4 \
+\cb5 \'a0 \'a0echo Domoticz status = $STATUS2\cb4 \
+\cb5 \'a0 \'a0if [ "$STATUS2" == "OK" ] ; then\cb4 \
+\cb5 \'a0 \'a0\'a0 \'a0exit\cb4 \
+\cb5 \'a0 \'a0else\cb4 \
+\cb5 \'a0 \'a0\'a0 \'a0STAMP=$(date +"%Y-%m-%d %H:%M:%S")\cb4 \
+\cb5 \'a0 \'a0\'a0 \'a0echo $STAMP NOK rechecking... >> $logfile\cb4 \
+\cb5 \'a0 \'a0\'a0 \'a0echo Domoticz status NOK, checking again in 5 seconds...\cb4 \
+\cb5 \'a0 \'a0\'a0 \'a0sleep 5\cb4 \
+\cb5 \'a0 \'a0\'a0 \'a0DOMOTICZ=`curl -s --connect-timeout 2 --max-time 5 "http://$ip:$port/json.htm?type=devices&rid=$$idx"`\cb4 \
+\cb5 \'a0 \'a0\'a0 \'a0STATUS3=$(echo $DOMOTICZ | jsonValue status 1)\cb4 \
+\cb5 \'a0 \'a0\'a0 \'a0echo Domoticz status = $STATUS3\cb4 \
+\cb5 \'a0 \'a0\'a0 \'a0if [ "$STATUS3" == "OK" ] ; then\cb4 \
+\cb5 \'a0 \'a0\'a0 \'a0\'a0 \'a0exit\cb4 \
+\cb5 \'a0 \'a0 \'a0 \cb4 \
+\cb5 \'a0 \'a0else\cb4 \
+\cb5 \'a0 \'a0\'a0 \'a0STAMP=$(date +"%Y-%m-%d %H:%M:%S")\cb4 \
+\cb5 \'a0 \'a0\'a0 \'a0echo $STAMP NOK Domoticz crashed, restarting Domoticz now >> $logfile\cb4 \
+\cb5 \'a0 \'a0\'a0 \'a0echo Domoticz crashed, stopping service, killing process and restarting service...\cb4 \
+\cb5 \'a0 \'a0\'a0 \'a0sudo service domoticz stop\cb4 \
+\cb5 \'a0 \'a0\'a0 \'a0sleep 8\cb4 \
+\cb5 \'a0 \'a0\'a0 \'a0sudo killall domoticz\cb4 \
+\cb5 \'a0 \'a0\'a0 \'a0sleep 5\cb4 \
+\cb5 \'a0 \'a0\'a0 \'a0sudo service domoticz restart\cb4 \
+\cb5 \'a0 \'a0\'a0 \'a0echo Domoticz service has been restarted\cb4 \
+\cb5 \'a0 \'a0\'a0 \'a0\cb4 \
+\cb5 \'a0 \'a0\'a0 \'a0#THE 2 LINES BELOW ARE ONLY FOR PUSHOVER NOTIFICATION, SEE https://github.com/fschaefer/pushover.sh\cb4 \
+\cb5 \'a0 \'a0\'a0 \'a0#bash /home/pi/pushover/pushover.sh -u YOUR_USER_KEY -a YOUR_API_KEY -q "Crash report" -m "Domoticz experienced a crash but has been restarted automatically" -s none\cb4 \
+\cb5 \'a0 \'a0\'a0 \'a0 \'a0 \'a0 #echo "A notification has been sent out via Pushover"\cb4 \
+\
+\cb5 \'a0 \'a0\'a0 \'a0fi\cb4 \
+\cb5 \'a0 \'a0fi\cb4 \
+\cb5 fi\cb4 \
+\pard\pardeftab720\partightenfactor0
+
+\f0\fs26 \cf2 \
+\
+\cb3 Then make the script executable with \cb4 \
+\pard\pardeftab720\partightenfactor0
+
+\f1\b\fs20\fsmilli10400 \cf2 \cb5 CODE: \cf6 \uc0\u8234 SELECT ALL\cf2 \cb4 \uc0\u8236 \
+\pard\pardeftab720\partightenfactor0
+
+\f2\b0\fs23\fsmilli11700 \cf7 \cb5 sudo chmod 755 /home/pi/auto_restart_domoticz.sh\cb4 \
+\pard\pardeftab720\partightenfactor0
+
+\f0\fs26 \cf2 \
+\
+\cb3 You can then test the script with\cb4 \
+\pard\pardeftab720\partightenfactor0
+
+\f1\b\fs20\fsmilli10400 \cf2 \cb5 CODE: \cf6 \uc0\u8234 SELECT ALL\cf2 \cb4 \uc0\u8236 \
+\pard\pardeftab720\partightenfactor0
+
+\f2\b0\fs23\fsmilli11700 \cf7 \cb5 ./auto_restart_domoticz.sh\cb4 \
+\pard\pardeftab720\partightenfactor0
+
+\f0\fs26 \cf2 \
+\
+\cb3 It should return "Domoticz status OK" if Domoticz is running. To test the actual restart function of the script, enter:\cb4 \
+\pard\pardeftab720\partightenfactor0
+
+\f1\b\fs20\fsmilli10400 \cf2 \cb5 CODE: \cf6 \uc0\u8234 SELECT ALL\cf2 \cb4 \uc0\u8236 \
+\pard\pardeftab720\partightenfactor0
+
+\f2\b0\fs23\fsmilli11700 \cf7 \cb5 sudo service domoticz.sh stop\cb4 \
+\pard\pardeftab720\partightenfactor0
+
+\f0\fs26 \cf2 \
+\cb3 followed by:\cb4 \
+\pard\pardeftab720\partightenfactor0
+
+\f1\b\fs20\fsmilli10400 \cf2 \cb5 CODE: \cf6 \uc0\u8234 SELECT ALL\cf2 \cb4 \uc0\u8236 \
+\pard\pardeftab720\partightenfactor0
+
+\f2\b0\fs23\fsmilli11700 \cf7 \cb5 ./auto_restart_domoticz.sh\cb4 \
+\pard\pardeftab720\partightenfactor0
+
+\f0\fs26 \cf2 \
+\cb3 You should see now that the scripts sees twice that Domoticz is not running and eventually it will be restarted.\cb4 \
+\
+\cb3 If it all works well, you can add the script to crontab to make sure it runs in the background and checks the status every minute. To do this enter:\cb4 \
+\pard\pardeftab720\partightenfactor0
+
+\f1\b\fs20\fsmilli10400 \cf2 \cb5 CODE: \cf6 \uc0\u8234 SELECT ALL\cf2 \cb4 \uc0\u8236 \
+\pard\pardeftab720\partightenfactor0
+
+\f2\b0\fs23\fsmilli11700 \cf7 \cb5 crontab -e\cb4 \
+\pard\pardeftab720\partightenfactor0
+
+\f0\fs26 \cf2 \
+\
+\cb3 And enter the following in an empty line:\cb4 \
+\pard\pardeftab720\partightenfactor0
+
+\f1\b\fs20\fsmilli10400 \cf2 \cb5 CODE: \cf6 \uc0\u8234 SELECT ALL\cf2 \cb4 \uc0\u8236 \
+\pard\pardeftab720\partightenfactor0
+
+\f2\b0\fs23\fsmilli11700 \cf7 \cb5 * * * * * /home/pi/auto_restart_domoticz.sh\cb4 \
+\pard\pardeftab720\partightenfactor0
+
+\f0\fs26 \cf2 \
+\
+\cb3 It should now run on the background, to check it you can enter the following to stop domoticz:\cb4 \
+\pard\pardeftab720\partightenfactor0
+
+\f1\b\fs20\fsmilli10400 \cf2 \cb5 CODE: \cf6 \uc0\u8234 SELECT ALL\cf2 \cb4 \uc0\u8236 \
+\pard\pardeftab720\partightenfactor0
+
+\f2\b0\fs23\fsmilli11700 \cf7 \cb5 sudo service domoticz.sh stop\cb4 \
+\pard\pardeftab720\partightenfactor0
+
+\f0\fs26 \cf2 \
+\cb3 After a short while you will notice that Domoticz has been restarted again, so the scrip works.\cb4 \
+\
+\cb3 I hope I didn't forget any steps \cb4 {{\NeXTGraphic icon_lol.gif \width300 \height340 \noorient
+}¬}\cb3  \cb4 \
+\
+\cb3 Gr. Ingmar}

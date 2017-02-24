@@ -26,17 +26,26 @@
 #include <ESP8266WiFi.h>
 #include <PubSubClient.h>
 
-// Update these with values suitable for your network.
-
 const char* ssid = "Jupiter";
 const char* password = "3827310955370393";
 const char* mqtt_server = "192.168.100.54";
 
+#define clientId "ESPtest"
+char unitId = '6'; //Unit id
+int idx1 = 999; //IDX number for domoticz
+float data1 = 0.0; //Datapoint
+float data2 = 0;
+int relay4 = 22; //Hardwire output
+int relay3 = 24; //Hardwire output
+int relay1 = 26; //Hardwire output
+int relay2 = 34; //Hardwire output
+
+unsigned long last;
+unsigned long interval = (6000); //Interval to send sensor data
+
 WiFiClient espClient;
 PubSubClient client(espClient);
-long lastMsg = 0;
-char msg[50];
-int value = 0;
+
 
 void setup_wifi() {
 
@@ -65,35 +74,31 @@ void callback(char* topic, byte* payload, unsigned int length) {
   Serial.print("Message arrived [");
   Serial.print(topic);
   Serial.print("] ");
-  for (int i = 0; i < length; i++) {
-    Serial.print((char)payload[i]);
+  for (int i=0;i<length;i++) {
+    Serial.print((char)payload[i]);      
   }
   Serial.println();
-
-  // Switch on the LED if an 1 was received as first character
-  if ((char)payload[0] == '1') {
-    digitalWrite(BUILTIN_LED, LOW);   // Turn the LED on (Note that LOW is the voltage level
-    // but actually the LED is on; this is because
-    // it is acive low on the ESP-01)
-  } else {
-    digitalWrite(BUILTIN_LED, HIGH);  // Turn the LED off by making the voltage HIGH
-  }
-
+  if ((char)payload[0] == unitId){
+   
+    switch ((char)payload[1]){
+      case 'r':
+       relayOut( (char)payload[2],(char)payload[3] );
+       break;
+    }//end switch case
+    }//enf first iff
+  
+  else {
+      Serial.println("reject unitId");
+      }
 }
 
 void reconnect() {
   // Loop until we're reconnected
   while (!client.connected()) {
     Serial.print("Attempting MQTT connection...");
-    // Create a random client ID
-    String clientId = "ESP8266Client";
-    //clientId += String(random(0xffff), HEX);
     // Attempt to connect
-    if (client.connect(clientId.c_str())) {
+    if (client.connect(clientId)) {
       Serial.println("connected");
-      // Once connected, publish an announcement...
-      client.publish("domoticz/in", "hello world");
-      // ... and resubscribe
       client.subscribe("domoticz/arduino");
     } else {
       Serial.print("failed, rc=");
@@ -106,7 +111,6 @@ void reconnect() {
 }
 
 void setup() {
-  pinMode(BUILTIN_LED, OUTPUT);     // Initialize the BUILTIN_LED pin as an output
   Serial.begin(115200);
   setup_wifi();
   client.setServer(mqtt_server, 1883);
@@ -121,12 +125,75 @@ void loop() {
   client.loop();
 
   long now = millis();
-  if (now - lastMsg > 20000) {
-    lastMsg = now;
-    ++value;
-    snprintf (msg, 75, "hello world #%ld", value);
-    Serial.print("Publish message: ");
-    Serial.println(msg);
-    client.publish("domoticz/in", msg);
+   if ((millis() - last) >= interval){ //To start sending sensordata
+    data1 = 0.0;
+    data2 = 0.0;
+    sensorDataout(idx1, data1, data2);
+    last = millis();   
+  }
+
+}//end main loop
+
+void sensorDataout(int idx, float data, int data2){
+      Serial.println("Sending data....");
+      String string = " { \"idx\" : ";
+      string.concat(idx);
+      string.concat(", \"nvalue\" : ");
+      string.concat(data2);
+      string.concat(", \"svalue\" : \"");
+      string.concat(data);
+      string.concat("\" \}");
+      Serial.println(string);
+      char output[80];
+      string.toCharArray(output, 80);
+      //char data2[] ={"\{\"command\": \"switchlight\", \"idx\": 14, \"switchcmd\": \"Off\", \"level\": 100\}"};
+      client.publish("domoticz/in",output);
+      // ... and resubscribe
+      client.subscribe("domoticz/arduino"); 
+}
+
+void relayOut(char relay, char state){  
+
+  switch (relay) {
+    case '0':  
+      switch (state){
+        case '0':
+        digitalWrite(relay1, LOW);
+        break;
+        case '9':
+        digitalWrite(relay1, HIGH);
+        break;
+      }
+    break;   
+    case '1':  
+      switch (state){
+        case '0':
+        digitalWrite(relay2, LOW);
+        break;
+        case '9':
+        digitalWrite(relay2, HIGH);
+        break;
+      }
+    break;
+    case '2':  
+      switch (state){
+        case '0':
+        digitalWrite(relay3, LOW);
+        break;
+        case '9':
+        digitalWrite(relay3, HIGH);
+        break;
+      }
+    break;
+    case '3':  
+      switch (state){
+        case '0':
+        digitalWrite(relay4, LOW);
+        break;
+        case '9':
+        digitalWrite(relay4, HIGH);
+        break;
+      }
+    break;   
   }
 }
