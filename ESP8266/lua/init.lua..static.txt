@@ -1,0 +1,8 @@
+wifi.setmode(wifi.STATION)
+ wifi.sta.config("YOUR SSID","YOUR KEY")
+ wifi.sta.connect()
+ wifi.sta.setip({ip="FIXED IP ADDRESS",netmask="YOUR NETMASK",gateway="YOUR GATEWAY"})
+ print("ESP8266 mode is: " .. wifi.getmode())
+ print("The module MAC address is: " .. wifi.ap.getmac())
+ print("Config done, IP is "..wifi.sta.getip())
+ dofile ("domoticz.lua")
