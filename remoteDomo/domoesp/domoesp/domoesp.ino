@@ -40,8 +40,15 @@ int relay3 = 24; //Hardwire output
 int relay1 = 26; //Hardwire output
 int relay2 = 34; //Hardwire output
 
+bool pirstate = LOW;
+int inputPin = 13;
+int val = 0; 
+
 unsigned long last;
-unsigned long interval = (6000); //Interval to send sensor data
+unsigned long interval = 300000; //Interval to send sensor data
+
+unsigned long lastmotion = 0;
+unsigned long intervalmotion = 60000; //Interval to send sensor data
 
 WiFiClient espClient;
 PubSubClient client(espClient);
@@ -111,10 +118,13 @@ void reconnect() {
 }
 
 void setup() {
+  pinMode(inputPin, INPUT_PULLUP);     // declare sensor as input
   Serial.begin(115200);
   setup_wifi();
   client.setServer(mqtt_server, 1883);
   client.setCallback(callback);
+  pinMode(5, OUTPUT);   
+  digitalWrite(5, HIGH);
 }
 
 void loop() {
@@ -122,16 +132,37 @@ void loop() {
   if (!client.connected()) {
     reconnect();
   }
+  
   client.loop();
 
-  long now = millis();
    if ((millis() - last) >= interval){ //To start sending sensordata
     data1 = 0.0;
     data2 = 0.0;
-    sensorDataout(idx1, data1, data2);
+    //sensorDataout(idx1, data1, data2);
     last = millis();   
   }
 
+  //Read conndcted sensors
+  val = digitalRead(inputPin);  // read input value
+  
+ 
+    if (val == HIGH && ((millis() - lastmotion) >= intervalmotion)) 
+      { // check if the input is HIGH   
+        lightOut(116,"On"); //idx 26, uit, sturen naar domoticz
+        Serial.println("Motion detected!");
+        // We only want to print on the output change, not state
+        lastmotion = millis();
+        pirstate = HIGH;
+      }
+    else if (val == LOW && pirstate == HIGH && ((millis() - lastmotion) >= intervalmotion)) 
+    {   
+        // we have just turned of
+        lightOut(116,"Off"); //idx 26, uit, sturen naar domoticz
+        Serial.println("Motion ended!");
+        pirstate = LOW;
+        // We only want to print on the output change, not state
+      }
+   
 }//end main loop
 
 void sensorDataout(int idx, float data, int data2){
@@ -196,4 +227,19 @@ void relayOut(char relay, char state){
       }
     break;   
   }
+}
+
+void lightOut(int idx, char cmd[]){  
+      Serial.println("lightOut");
+      //char data2[] ={"\{\"command\": \"switchlight\", \"idx\": 26, \"switchcmd\": \"Off\", \"level\": 100\}"};
+      String string = "\{\"command\": \"switchlight\", \"idx\": ";
+      string.concat(idx);
+      string.concat(", \"switchcmd\": \"");
+      string.concat(cmd);
+      string.concat("\", \"level\": 100\} ");
+      char data2[80];
+      string.toCharArray(data2, 80);
+      client.publish("domoticz/in",data2);
+      // ... and resubscribe
+      client.subscribe("domoticz/arduino"); 
 }

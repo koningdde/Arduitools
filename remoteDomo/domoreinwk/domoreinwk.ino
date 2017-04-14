@@ -334,7 +334,7 @@ void loop()
 
   if ((millis() - last) >= interval){ //To start sending sensordata
     data1 = bmp.readTemperature();
-    data2 = ((bmp.readPressure()/100));
+    data2 = ((bmp.readPressure()/100)-2);
     lcd.setCursor(0,1);
     lcd.print(data2);
     lcd.print(" mBar        ");

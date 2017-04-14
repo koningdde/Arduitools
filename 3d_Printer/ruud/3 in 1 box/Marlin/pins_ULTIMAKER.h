@@ -23,7 +23,7 @@
 #define Z_STEP_PIN 37
 #define Z_DIR_PIN 39
 #define Z_MIN_PIN 30
-#define Z_MAX_PIN 32
+#define Z_MAX_PIN -1//32
 #define Z_ENABLE_PIN 35
 
 #define HEATER_BED_PIN 4
@@ -53,7 +53,7 @@
 #define PS_ON_PIN          12
 #define KILL_PIN           -1
 #define SUICIDE_PIN        54  //PIN that has to be turned on right after start, to keep power flowing.
-#define SERVO0_PIN         13  // untested
+#define SERVO0_PIN         32//13  // untested
 
 #ifdef ULTRA_LCD
 
