@@ -1,0 +1,53 @@
+How can I use "Hyper Terminal" to send a "text file" to program my modem?
+
+You must first have created a text file with the appropriate command lines for the particular device you are attempting to program. See support
+article # ( 698) for instruction.
+
+1. Locate and launch "Hyper Terminal" on you computer. This program will normally be located in Program files...Accessories....Communications in
+you computer.
+
+2. Enter a name and choose an icon that is relevant to the type of connection you are making in the "Connection Description" window so that you
+will recognise it the next time you need it.
+
+3. In the "Connect To" window, choose the com port that you will be using to connect the RS232 serial cable to on your computer and click "OK".
+(typically com 1)
+
+4. Select the correct baud rate, data bits, parity, stop bits, and flow control that the modem will need for proper communications from the serial
+port and click on "Apply" and then "OK". If this is unknown, you may need to refer to whatever literature you may have for the modem or contact
+your vender for this information.
+
+5. Click on "File" on the "menu" bar and select "Properties".
+
+6. In the "Properties" window , click on the "Settings" tab.
+
+7. In the "Settings" window, click on "ASCII Setup".
+
+8. Enter 500 in the "Line Delay" field and click "OK" and then "OK" again in the "Properties" window.
+
+9. Connect one end of an RS232 cable to your computer com port that was selected when you configured "Hyper Terminal" and the other end of
+the cable to the serial port that the modem will use for programming.
+
+10. Power on the modem. 
+
+11. In "Hyper Terminal" go to the "menu" bar and select "Transfer" and click on "Send Text File".
+
+12. In the "Send Text File" window, scroll by double clicking your way to the location of the "text file" that was previously configured and saved
+that contains the programming commands for the modem you are programming.
+
+13. When you have located the "text file", highlight it and click open or just double click on it.
+
+14. "Hyper Terminal" will now send each of the command lines, one at a time, every 500 milliseconds (1/2 second) to the modem. You should be
+able to see the commands on your computer screen as they are sent and they should be followed with an "OK" response each time a command is
+sent to the modem. IF not, recheck all connections and settings and try again.
+
+15. After all of the commands have been sent, power off and disconnect the modem. You can configure and save your "text file" for the next
+modem and start the process again from step # 9.
+
+16. When you are done programming, click on the "X" on the "menu" bar to close the "Hyper Terminal" program.
+
+17. When "Hyper Terminal" asks you if you want to disconnect, click on "Yes".
+
+18. When "Hyper Terminal" asks you if you want to save the connection, click on "Yes". Saving your connection will save you from reconfiguring
+the program every time you use it. When you launch your "Hyper Terminal" connection that you created the next time your ready for
+programming, you can start from step 9. By default your computer should save your connection in the same location that "Hyper Terminal" was
+initially.

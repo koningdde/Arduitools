@@ -1,0 +1,11 @@
+heading is oppositely directed.  had they been due to different local
+environments for the pair of axis elements the asymmetry would have
+persisted when the feeders were interchanged, this did not occur.  no
+account was taken in the design of the delays introduced by the switching
+matrix.  although they would be relatively small the path lengths through
+the matrix were not equal for the four signals and depended on the pattern
+of switch closures.  it is possible that this is a source of asymmetry and
+a careful study of these pathways is needed.  there are strong indications
+from modeling on a practical ground that the forward gain is between 7 and
+8 dbi, but this needs to be confirmed by measurement and would require
+reference to a standard antenna.  the loss between the common feed point

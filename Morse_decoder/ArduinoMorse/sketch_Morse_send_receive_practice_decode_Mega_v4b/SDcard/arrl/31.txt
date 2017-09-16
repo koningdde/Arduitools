@@ -1,0 +1,11 @@
+running in case you are unfamiliar with software defined reception as
+implemented by fifi, this is a good time to pause for a brief explanation.
+the signals arriving at fifis antenna port are amplified before being
+filtered by the preselector.  they are then mixed with the output of a
+local oscillator with the result being two base band audio signals that
+comprise the so called in phase i and quadrature q channels.  these two
+signals contain all the information your software needs to work its
+demodulation magic.  the next step is to send the i/q data to your
+computer.  fifi gives you two ways to do this.  you can transfer the
+baseband audio from fifis 1/8 inch stereo output jack to an external sound
+device such as the one in your computer for final conversion and

@@ -1,0 +1,13 @@
+text is from may 2015  qst  page 63
+
+common elements and techniques.  figure 1 shows a typical station as a
+block diagram from the power supply and audio sources at the left all the
+way to the radiated rf at the right.  if you draw a circle around each box,
+youll cross one or more arrows.  those arrows and the action or signal they
+represent are what you test when conducting the proof.  a power supply
+proof lets start simple and look at the power supply.  what that power
+supply is supposed to be doing is listed in table 1.  notice that not only
+is a performance specification given, but certain test methods or equipment
+are listed, too, such as a voltmeter or testing under load.  lets give the
+supply a proof test like you might before taking it to field day.  open
+your shack notebook, you do have a shack notebook, right?  note the date,

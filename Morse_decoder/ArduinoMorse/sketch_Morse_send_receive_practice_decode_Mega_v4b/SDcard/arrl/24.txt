@@ -1,0 +1,11 @@
+lack of significant high frequency harmonics keep the capacitive leakage
+currents low.  gfcis are set to ignore about 5 ma of leakage current this
+is high enough to prevent false trips yet still low enough to protect
+people.  the output of an inverter is less sinusoidal than commercial power
+and some higher frequencies escape even though the output is somewhat
+filtered.  these high frequencies cause higher capacitive leakage currents
+and the offset between the switching times of the hot and neutral leads
+means the leakage currents in the power leads are not in phase and cannot
+balance to cancel each other.  the gfci sees these currents and trips.  it
+is also important to remember that the neutral output lead from an inverter
+is likely hot.  modern gfcis interrupt both the hot and neutral leads when

@@ -1,0 +1,11 @@
+alternative to the optional whip antenna and tuner from miracle antenna, i
+decided to build a magnetic loop antenna based loosely on an article by rob
+capon, wa3ulh now w3dx.  check out robs article for a more complete
+discussion.  my antenna support consists of a childs plastic exercise hoop
+originally fi lled with plastic beads purchased at a toy store for 5r99.
+the hoop is secured with cable ties to a length of 1 inch pvc pipe 1r49 at
+a nearby home center.  the large loop, 10 feet in circumference, is made
+from a conductor threaded inside the plastic hoop.  you can use the shield
+from a length of coax or a heavy gauge wire.  i found just enough 4 awg in
+the arrl lab junk box to do the trick.  the small loop, made from rg 8x
+coax shield, is 2 feet in circumference.  the coax feed line connects to

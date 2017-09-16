@@ -1,0 +1,11 @@
+not large, all i will need is a small rechargeable battery that will meet
+the following requirements.  i want to be able to transmit a 50 w signal if
+needed.  that means my ftm 10r will need 12 v supply at around 10 a.  i
+will not always need maximum power, but i want full transmit power for
+those occasions that require it.  the battery must be safe for traveling
+while in an enclosed cloth bag without leakage and for operating and being
+charged in an enclosed space.  the battery needs to be small enough to fit
+in the bag and light enough to make carrying the bag practical for me and
+my wife.  the best technology for this application is one of the
+recombinant designs agm or gel cell that dont release significant hydrogen
+while being charged, cant spill and can be recharged many times without

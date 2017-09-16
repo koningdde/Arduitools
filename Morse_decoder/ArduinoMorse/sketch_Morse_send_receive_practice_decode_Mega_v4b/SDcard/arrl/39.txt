@@ -1,0 +1,11 @@
+really just a very closely spaced parallel conductor feed line.  by using
+the right mix of ferrite, the choke will create enough impedance across the
+hf range.  following the guidance of jim browns, k9yc, tutorials on
+ferrites and chokes, i chose a 2r4 inch diameter 31 mix with a winding of
+10 turns.  the ferrite tutorial estimates that the baluns choking impedance
+at 7, 14, and 28 mhz is 3000, 3500, and 2000, respectively, as shown in
+figure 1.  for the bifilar winding, i used twoconductor pvc insulated 16
+zip cord which is fine for 100 w power levels.  if you plan on running high
+power, use 12 or larger wire.  for this core you need about 3 inches of
+wire per turn plus the connections at either end for a total of about 36
+inches of wire, including the input and output connections.  the balun

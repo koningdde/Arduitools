@@ -1,0 +1,13 @@
+text is from may 2015  qst  page 61
+
+the coax.  for example, on 2 meters, if the swr were 5 1, the loss in 100
+feet of rg 6 tv coax would be about 6 db.  this sounds bad, but the good
+news is that at the bottom of the coax, the swr would be less than 2 1.
+the resulting lower power at the antenna would also reduce the stress on
+the balun.  this is the technique i use on my sailboat.  my 156 mhz marine
+vhf antenna works fine on 2 meters due to the loss in the 50 feet of coax
+from the antenna location at the top of the mast to the radio.  the loss in
+signal is more than made up for by the line ofsight height advantage.  your
+antenna should show some directivity on 2 meters and will definitely put
+some energy out toward houston.  of course, if you are planning on working
+into repeaters, you will do much better if your antenna is vertically

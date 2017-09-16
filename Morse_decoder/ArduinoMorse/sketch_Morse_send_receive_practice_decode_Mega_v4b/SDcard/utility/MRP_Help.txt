@@ -1,0 +1,238 @@
+
+Morse Code Send & Receive Practice for Arduino Mega v4b Helpfile 
+January 17, 2017 (c) Barry Block b5@xs4all.nl
+
+update - now with a modified WB7FHC's Morse Code Decoder v.1.1, 
+keyer, t-hunt beacon, and send from keyboard.
+
+This sketch is for the Arduino Mega. 
+It expects the Mega to be connected to a usb port on a computer with a good terminal program.
+I use ExtraPutty, see below. To modify files on the SDcard I use 'Tera Term'.
+
+More setup help is at the beginning of the sketch file.
+UK/US characters only are employed in the code array.
+
+Set sketch & terminal program to the same baud and protocol.
+I recommend: 115200/8-N-1 no handshake.
+
+Choice of tone/noTone or external oscillator circuit triggered by pin13.
+Plug speaker to Digital pin8 and Gnd.
+Use a resistor or pot in series if you want to. 120 ohms is good. I don't use one.
+Find a pitch that is louder than others and set loud = the value. P7 & P8 will help to do this.
+Find a pitch that is softer than others and set soft = the value - see example in sketch.
+
+SD card support:
+
+Sd card pinout for Mega:
+gnd
+vcc
+miso     50
+mosi     51
+sck      52
+cs       53 <---------53 must be an output pin
+
+pin 53 must be left as an output pin.
+const int chipSelect = 53;
+
+Set the variable SDready to true or false depending on whether you have an SD card installed.
+You do not see the SD card options (or error messages) if SDready is false.
+
+The SD card can be used to randomly choose a textfile to send as Morse.
+There are, at present, two groups of files.
+1) joke text files.
+NOTE - number of textfiles in SD root folder must be named 0 1 2...98...999. No extension.
+Presently, no more than 1000 but you can change that.
+2) Folder ARRL has 102 text files taken from the ARRL web site.
+The files in this folder should also just be numbers but have extension .txt
+
+Paddle/straight key:
+The paddle jack is a 3.5mm stereo jack to connect paddle or straight key.
+Outer sleeve jack pin is ground.
+Dit & Dah go to L & R on the plug, so to speak. They connect to D2 & D3.
+Set the pins for INPUT_PULLUP. At least for my paddle.
+You might try just INPUT if there is a problem.
+If your paddle is weird you may have to test the opposite states. !Digital.read or Digital.read.
+
+When connected to a terminal the computer tries to understand the code you send.
+This is very useful to improve your timing!
+You can also run this routine without a computer/terminal/monitor. To hear the sound only.
+Just to practice sending lying down...in a relaxed way.
+You do need a battery supply for this. The software knows when you do this.
+
+For straight key just use the dit pin. The dah pin will be ignored.
+
+To start from battery supply, hold the key down after power is applied.
+Paddle, stright key, or beacon will be selected by how long you hold the key down. 
+< 1/2 sec: paddle, < 1 sec: straight key, > 1.5: beacon.
+
+Battery power:
+Install a 100k resistor (for instance) from analog pin A5 to Vin.
+If you do this the software knows when it is running on battery power.
+
+Audio decoder:
+An audio decoder is now implemented! 
+
+https://b1954a81d64a6708574fc19ceb638c128f3998f4.googledrive.com/host/0B8Ql_9-ygoisczg4STFicFZPWEE/WB7FHC-Decoder-Sketch.html
+
+(WB7FHC's Morse Code Decoder v.1.1) Budd wrote it for a 20x4 display. 
+I removed all the special display code and added full manual control of wpm.
+A mic & preamp are required. 
+You can build a simple preamp and use an electret mic or a module which is simpler and cheaper.
+I highly recommend this very small, cheap, sensitive module:
+
+http://www.banggood.com/CJMCU-9812-MAX9812L-Electret-Microphone-Amplifier-Development-Board-Sensor-Module-For-Arduino-p-1103128.html
+
+It works great but requires an added resistor. 100k to 470k across the mic module pins vcc & output.
+*Note* You must power this from 3.3 volts! Not 5 volts! The Arduino supports this.
+
+The decoder works well on clean signals. By default it tries to find the proper speed. 
+It often gets confused so I added a manual override.
+
+For fun I've added two new Morse characters for the decoder only. 
+A carrage return/line feed: (cr) -.-..-.  I find it easier to send 'kf'.
+A clear screen (lr) .-...-.  I think 'asn'.
+
+Run options:
+
+s(value) adjust letter space time (1-255).
+Pause between sent characters. This is quite useful.
+It is good to set wpm fast and put more space between characters when practicing.
+Try not to listen to very slow code. It is much better to send at 20wpm and space set at 10 or
+something than to send at 5 wpm with space set to 3.
+TRAIN TO HEAR THE CHARACTERS not count dits & dahs.
+
+o(value) wordspace (1-30)
+When a text file is being sent you can adjust the time between words.
+
+w(value) adjust wpm (Example: w20).
+Speed at which the code is sent.
+
+e toggle screen echo
+When a text file is being sent you can choose to have the characters show on screen
+as they are sent or after the file has completed.
+
+p(value) set pitch, p off, p7 -10Hz, p8 +10Hz, p9 soft (preset) p99 loud (preset)
+The tone frequency you hear. Play with these and all should be clear.
+
+r(value) adjust number of characters to send (row length: 1-55).
+When you press the Spacebar, characters are sent in code. This option selects how many.
+
+t Enter characters to send (55 max) or just Enter to clear a 'TestString', called tString.
+You can define which characters are sent for practice by establishing a testString.
+There are also presets: letters, numbers, punctuation, and letters/numbers only.
+You can save/load/delete the testString to/from the SD card.
+t1 (Load) t2 (Save) t3 (Delete) tString.
+
+t4 tRepeat toggle. (SD card not required) works with testRow set to 1.
+You have the option of repeatedly sending the same test char until you press the Spacebar.
+This is useful to learn a new character. The testString can be any set of characters.
+
+t5 number of seconds between repeats. Works with t4, t6, and t7. Set default at top of sketch.
+t6 (toggle) auto repeat tString run without pressing Spacebar
+
+t7 Type in answers option for improving memory on short runs. If selected t4 & t6 are set off.
+Computer shows correct answer string.
+t8 Type in answers but computer will not show answers until you get it right. It repeats.
+
+f1 randomly selects a joke file and sends it.
+f2 randomly selects an ARRL file and sends it.
+SD card must be installed for this.
+You have the choice of seeing the text as it is sent (echo) or after the file completes.
+
+x SD card menu (You do not see the SD card menu or options if SDready is false.)
+At this time there are three sub menus.
+Joke & ARRL files and this help file.
+So first you select which group to work with.
+You can (l) list the textfiles, (r number) read a selected file,
+(s number) send a selected file, (w) write a file to the SDcard (d) delete a file.
+From here you can only write the help file to SD card. You may care to edit it.
+I do that all the time :-)
+
+You can add a joke or ARRL file to the SDcard, or replace the helpfile.
+To write (save) a textfile (w number), without removing the SD card:
+For sending a file to the Arduino I suggest the free terminal program 'Tera Term':
+https://ttssh2.osdn.jp/
+Important: Go to setup-serial port and set transmit char delay to 1 ms.
+I just use this program to send a file to the Arduino. The write file function.
+In Tera Term you can drag a file to the screen or paste with right click or 'send file' 
+from file menu.
+You can just press ESC when you are sure there is no more data to process.
+or:
+Make the file in a text editor & optionally, make the last character char[129] or char[4].
+---
+
+For the terminal monitor (everything but 'write file') I like PuTTY Extra. 
+It supports VT100 and text looks good and the scrollback works well and can be turned off.
+It too is free but does not send text files well enough.
+http://www.extraputty.com/download.php
+(you could also use a computer to put files on the SDcard. How 'bout that :-)
+
+y paddle 
+y (number) straight key
+Paddle will try to display the chacters & words you send. This WILL improve your timing.
+Straight key will show dits & dahs & a space between characters if your timing is close enough.
+The keyer can be reached from here too, to send a message. There is a menu to set some options.
+
+z Computer sends a testString character, you press the corresponding key.
+Instead of pen & paper you work at your speed to respond to each character sent.
+
+z(number) for learning the code. z1(letters) z2(numbers) z3(punctuation) z>3(# of repeats)
+This is an effective way to learn the code!
+Starts with 2 characters. Sent a number of times (selectable), then adds a third character, etc.
+If an SD card is installed, a bookmark option to save where you are & continue later is featured.
+When you ESC the routine you are asked if you want to Save the bookmark (y/n) or Delete it (d).
+Select either y, n, or d. If unsure, select y :-)
+n is default so if you press another key instead of y or d, no is selected.
+
+n(row) send numbers
+Sets testString to numbers.
+If you follow with a number it will set how many characters are sent each run of the test.
+
+l(row) send letters
+Similar to the above. Sets testString to letters. 
+Note: 'testString' is now called 'tString' in the program.
+
+u(row) send punctuation characters or u77 (or >) to not send them.
+Similar to the above. Sets testString to punctuation characters.
+
+c clear screen
+or to toggle this option: c(1-8)
+If your terminal program supports ANSI control characters, set ANSI = true at top of sketch.
+c9 will toggle clearing the scrollback buffer or not when you clear the screen.
+
+d show Morse code chart. Shows all characters and their code.
+
+b audio decoder & straight key sender
+A mic or key inputs code. Decoding takes place & the result is displayed on the terminal.
+There is a sub-menu showing a few options. Mostly to control wpm and clear screen. 
+However from here you can also access the main menu (\) or keyboard send option. (s)
+This allows you to send and receive Morse without even knowing the code.
+This can also be used with a straight key for sending practice and will display the 
+characters/words you (actually) send.
+You can send and receive code without knowing the code. Sacrilege!
+
+a send by keyboard. Press a key and the code for it is sent.
+
+v toggle letter display in upper/lower case
+
+k keyer relay toggle. k(1-8) keyer message routine. 
+k9 t-hunt beacon. Can also be reached through keyer.
+
+m or i displays main option menu
+
+j pseudo call sign generator. Sends 2 letters, 1 number, 3 letters. 
+Waits and sends another till you press ESC.
+
+h or ? displays this text file if an SD card is found & the file is in folder:
+'/utility/' & named 'MRP_Help.txt'
+
+/utility/MRP_Help.txt
+
+Status line explained:
+e echo, k keyer relay, Sclr scrollback buffer, case letter case, t4 tRepeat toggle, 
+t5 char repeat pause, t6 teststring auto repeat, t7 typein answers, t8 answers check
+s letter space time, wS word space time, w wpm, h hear wpm, p pitch, r row,
+Zx repeat current Z string x times, Jfiles total, Afiles total, Kfiles, total 
+tRow tString row, tStr tString
+
+Å

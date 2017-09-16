@@ -1,0 +1,11 @@
+element and true time delay operation join together to provide the
+horizontal response as modeled with 4nec2 and shown in figure 3.  this
+pattern shape is largely preserved over the frequency range, but the
+forward gain decreases significantly as the operating frequency is lowered.
+combiner amplifier the combiner amplifier shown in figure 2 is a three
+terminal device that must provide proper termination for the delay and
+reference lines, port to port timing and amplitude accuracy as well as
+amplification.  it is essential to understand the port characteristics of
+the combiner amplifier before we consider its internal circuitry.  the
+input impedance of port a and port b of the combiner amplifier must closely
+match the characteristic impedance of the coax line in this case 75  over

@@ -1,0 +1,51 @@
+Morse receive & send project Mega v4 parts list for v4 with keyer and decoder
+
+DIY Plastic Electrical Junction Box Instrument Chassis 125X80X32mm (no screws included)
+Product ID: 982024  €2.19
+
+Mega2560 R3 ATMEGA2560-16AU + CH340 Board With USB For Arduino
+Product ID: 940935  €7.98
+
+3.5-5.5V Standard Passive Buzzer Module For Arduino
+Product ID: 984074  €1.43
+
+10Pcs PJ-392 3-Pin 3.5mm Stereo Headphone Audio Video Jack Socket Plug With Nut (2 used)
+Product ID: 1015146  €2.21
+
+Micro SD TF Card Memory Shield Module SPI Micro SD Adapter For Arduino
+Product ID: 919914  €1.54
+
+8GB Class 10 Micro SD Card TF Card With Card Adapter For Cellphone
+Product ID: 1009135  €5.81
+
+3 IN 1 120Pcs 10cm Male To Female Female To Female Male To Male Jumper Cable For Arduino (optional, recommended)
+Product ID: 1054670  €3.09
+
+Electronic Parts Component Resistors Switch Button Kit For Arduino (optional, for the 100k resistor)
+Product ID: 967062  €2.95
+
+160pcs M2 M2.5 M3 M4 M5 Steel Screws SEM Phillips Pan Head Nuts Assortment Kit (optional, but handy for Arduino kits)
+Product ID: 987438  €7.74
+
+Hubsan FPV X4 Plus H107D+ H107C+ RC Quadcopter Spare Parts Rubber Feet (really optional)
+Product ID: 1028407  €2.31
+
+5V 1 Channel Level Trigger Optocoupler Relay Module For Arduino (optional, for keyer output)
+Product ID: 915614  €1.66 (Mechanical Relay, noisy and large)
+Better yet, find and use a reed relay with 1N4148 diode. 5V Relay SIP-1A05 4PIN for 0.61 Euros. Or, I recommend:
+http://www.dx.com/p/sip-1a05-4-pin-dry-reed-relay-black-5-piece-pack-136786#.WBMcCPRo1Ah
+
+update! - now with a modified WB7FHC's Morse Code Decoder v.1.1
+Sound Sensor Detection Module LM393 Chip Electret Microphone For Arduino (optional)
+Product ID: 929245  €1.56
+
+basic   21.16
+options 19.31 
+total   40.47 Euros
+
+Order from http://www.banggood.com/
+no mimimum & no shipping charge. I do suggest you pay for tracking for delivery in Holland.
+
+
+
+

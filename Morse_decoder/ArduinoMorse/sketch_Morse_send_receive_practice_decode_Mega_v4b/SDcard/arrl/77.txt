@@ -1,0 +1,11 @@
+program starts when the download completes.  the running program sends a
+serial message to the computer that indicates the decivolts read by the
+voltmeter or the mw of the wattmeter measurement.  the monitor outputs are
+leds connected to eleven output pins of the picaxe.  i got two decades of
+monitor levels by using the eleventh led to indicate that the second decade
+is in use.  i programmed mine to indicate 1/2 v intervals starting at 5 v.
+at 10 v the eleventh led lights along with the zero to indicate 10 volts,
+and eleventh led stays on like a tens digit as the voltage rises to 14 1/2
+v.  this results in a range of 5 to 9 1/2 v, then with the eleventh led, 10
+to 14 1/2 v in 1/2 v steps.  the analog input is digitized and scaled to
+decivolts.  if the number is equal or larger than the monitor point, the

@@ -1,0 +1,11 @@
+with the spot function disabled, the voltage at the ritb connection on the
+synthesizer board should be high when the key is down and low when the key
+is up.  debug the rit keying circuit if necessary.  testing with the
+transmitter connect the key jack of your transmitter to the appropriate
+output of the keying circuit.  with your transmitter connected to a dummy
+load, key the system.  your transmitter should function normally, and the
+signal should be clean.  when judging the quality of your signal with your
+own receiver be aware that receiver overload and saturation are likely to
+generate spurious responses in the receiver that mask the true keying of
+the transmitter signal.  getting on the air put the system on the air and
+ask another remote ham operator for a critical signal quality report.

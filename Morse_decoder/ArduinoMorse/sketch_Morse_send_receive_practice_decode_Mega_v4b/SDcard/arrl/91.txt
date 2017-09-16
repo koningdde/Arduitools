@@ -1,0 +1,13 @@
+text is from may 2015 qst page 35
+
+capacity rc.  these measurements assure the battery has enough reserves to
+restart the engine when the traffic light turns green.  all of this
+operation is under the control of a battery monitoring system bms.  it may
+be part of the engine cpu, but it may indeed be a standalone cpu
+interconnected via a data bus system.  during engine shutdown, electric
+motors ensure that power brakes, hvac, transmission servo pressure, and the
+engine cooling system continue to operate.  to ensure that these
+accessories have a constant voltage source, most eis systems use a dc to dc
+convertor.  to provide power to the convertor, a second trunk mounted agm
+absorbent glass mat battery might be used.  at least one automobile model
+uses a dual layer super capacitor which is charged during deceleration as a 

@@ -1,0 +1,11 @@
+are shown in table 4.  i have two solid state amplifiers an ameritron als
+600 and an elecraft kpa500.  both amplifiers put out full power into the
+tuned antenna system on all bands from 80 to 10 meters i did, of course,
+limit power to 200 w on 30 meters.  as pointed out in both manuals, i found
+occurrences in which both auto tuners would not tune when changing bands.
+this can occur if the tuning solution for the previous band results in a
+very high swr on the new band, and more often happens when going from a
+lower frequency band to a higher frequency band especially when using a
+highly reactive antenna.  this very high swr can reflect all input power
+from your transceiver, so the auto tuner cannot sense rf input power.  the
+solution is to simply cycle power to the auto tuner when changing bands.

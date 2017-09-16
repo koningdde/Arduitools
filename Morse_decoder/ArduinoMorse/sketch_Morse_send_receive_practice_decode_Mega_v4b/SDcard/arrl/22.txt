@@ -1,0 +1,11 @@
+the meter.  place the coil near the magnet but in a position where it
+cannot contact the coil or the connecting wires.  wait for the magnet to
+reach complete rest.  switch on the current while watching the magnet the
+magnet will pivot and move, eventually stabilizing in a fixed position as
+in figure 1.  my relay coil is drawing about 80 ma.  when you switch off
+the current, the magnet will return to its original position.  the magnet
+is moving so that its magnetic field is aligned with the magnetic field of
+the energized coil.  cycle the current on and off several times.  the
+magnet will always stabilize with one face of the magnet in the same
+position.  slowly rotate the coil and verify that the magnet rotates to
+follow the orientation of the coil.  reverse the power supply leads and

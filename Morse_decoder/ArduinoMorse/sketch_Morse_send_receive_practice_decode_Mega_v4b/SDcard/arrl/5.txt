@@ -1,0 +1,11 @@
+figure 1.  he notes that he has a similar arrangement but instead of my
+configuration, he has the lightning arrestor outside the house on the
+antenna side of the tuner, so much of the lightning induced current will go
+directly to ground.  he asks if that will work as well?  you are quite
+correct that a lightning arrestor outside of the antenna entrance panel is
+the best spot in many respects.  the configuration shown in the may column
+would thus be most appropriate for a remote tuner mounted near the antenna,
+although a balanced arrestor could also be added on the antenna side to
+help protect the tuner.  for a tuner inside the house, a balanced arrestor
+should be installed at the grounded entrance panel.  in fact, thats exactly
+how i have my station setup.  there are, however, a number of

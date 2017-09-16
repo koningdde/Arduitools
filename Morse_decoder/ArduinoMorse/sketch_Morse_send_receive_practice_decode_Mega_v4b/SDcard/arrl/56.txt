@@ -1,0 +1,11 @@
+sunspot number did not quite translate into the cme rate itself.  the cme
+occurrence rate in cycles 24 and 23 are comparable in the maximum phase.
+then how do we understand the mild space weather in cycle 24?  a clue to
+the reason for milder space weather came from the fact that all cmes that
+produced particle events are halo cmes in cycle 24, compared to about 70 in
+cycle 23.  halo cmes originate from close to the disk center and expand
+rapidly, giving the appearance of surrounding the sun.  there must be
+something different about the size of the cmes in solar cycle 24.
+gopalswamy and co workers examined the relation between cme width and speed
+and found that the cycle 24 cmes are wider than the cycle 23 ones for a
+given speed.  for energetic cmes speed exceeding 1000 km/s, the width is

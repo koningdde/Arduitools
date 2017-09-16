@@ -1,0 +1,11 @@
+situations where i could have brought a directional antenna with me, such
+as a small yagi for hf or vhf.  if its light enough, rotating a yagi can be
+done with the armstrong method, but it is often very inconvenient to do so.
+perhaps you dont want to leave the rig behind while you go outside to
+adjust the antenna toward that weak station, or perhaps youre in a tent and
+its dark out there.  a battery powered rotator portable rotation has
+developed a solution to these problems.  the 12pr1a is an antenna rotator
+figure 6 that functions on 9 to 14 v dc.  at 12 v, the unit is specified to
+draw 40 ma idle current and 200 ma or less while the antenna is turning.
+it can be powered from the battery used to run a typical portable station.
+while the control head figure 7 will function with as little as 6 v, a

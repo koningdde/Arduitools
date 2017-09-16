@@ -1,0 +1,11 @@
+weather protection and to provide for mounting.  feel free to incorporate
+your own ideas, but the simplest method ive found is use a right angle type
+f adapter available at most home improvement stores and a few pvc pipe
+fittings as shown in figure 9.  cut a piece of 3/4 inch pvc 42 inches and
+slide the antenna inside with the right angle adapter attached to the type
+f connector at the base.  drill a hole large enough to pass the feed line
+coax in a 3/4 inch plug and feed the coax through the plug and middle of
+the t as shown.  add a type f connector to the end of the feed line, and
+fit the pieces together as shown.  finish weatherproofing the housing by
+placing a 3/4 inch pvc cap on top.  the pvc pipe can be pressed together
+very tightly, so gluing should not be necessary.  this makes it easy to

@@ -1,0 +1,13 @@
+text is from may 2015 qst page 58
+
+phone plug to a single phono jack. even though it is a single channel
+speaker, it is important not to plug a mono phono plug directly into the k3
+speaker jack because the longer sleeve of the mono plug will short out one
+of the k3 output channels. while a revision to the k3 is designed to avoid
+damage in that circumstance, its best not to fight with mother nature. for
+my usual speaker arrangement, i fabricated a y adapter with a stereo plug
+that goes to the k3. it has two mono jacks, one on each channel. my k3 is
+equipped with a second receiver and i can thus have one receiver going to
+each of my two wall mounted speakers, separated by about 5 feet. for a
+single receiver, the two speakers can be used to hear the special spatial
+audio effects that the k3 can provide, and two ksp3 speakers could be used 

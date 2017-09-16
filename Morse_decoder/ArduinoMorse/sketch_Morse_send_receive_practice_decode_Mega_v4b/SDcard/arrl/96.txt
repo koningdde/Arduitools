@@ -1,0 +1,13 @@
+text is from june 2015 qst  page 58
+
+the input of a signal generator can be harmful to the generator, but is
+harmless when the ek1a is attached to an antenna.  make sure to turn on the
+ek1a first and then hook up the signal generator to the antenna jack.
+though the direct digital synthesizer dds frequency control is calibrated
+at the factory, the next instruction explains how to calibrate the display
+if needed by using a frequency counters output hooked to a small test point
+on the main circuit board.  after the covers were in place, pete placed
+four stick on rubber feet not included to keep the ek1a firmly on the bench
+top.  arrl lab testing as shown in table 3, the receiver performance is
+very good overall.  the ek1as lowest dynamic range at 2 khz is 80 db third
+order imd dynamic range, better than some much more expensive transceivers

@@ -1,0 +1,11 @@
+me the difference between tube and solid state amplifiers in terms of
+performance, ease of operation, cost, or other characteristics?  i also
+wonder why some hf amplifiers dont operate on the 10 and 12 meter bands?  a
+arguably, to a station at the other end of the contact, the signal from a
+tube amplifier sounds about the same as that from a solid state unit.  in
+terms of the impact to your station, however, the solid state amplifier has
+a number of advantages.  perhaps the biggest advantage is that transmitting
+tubes are getting more and more expensive and it is getting harder to find
+replacement tubes of good quality.  while properly operated transmit tubes
+should last 10 years or more, we do make mistakes, and the rest of the
+amplifier should last much longer, meaning we will need to find replacement

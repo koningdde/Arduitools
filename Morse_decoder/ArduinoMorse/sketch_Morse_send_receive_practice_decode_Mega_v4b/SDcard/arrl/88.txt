@@ -1,0 +1,13 @@
+text is from may 2015 qst page 33
+
+will find sufficient commentary, block diagrams, and waveform illustrations
+to miss little of the meat of this book by going around the math. the
+basis and application of multiple types of time and frequency domain
+instruments are presented, along with practical examples and expected
+results. in no sense is this book a substitute for the operating manuals
+of particular measurement systems, but if read before attempting the
+operation of them, it will make the applications and limitations of the
+system type much more clear. the author starts off with clear descriptions
+of the relationships between time and frequency domain measurements and
+follows with a refresher on the use of decibels in defining both voltage
+and current ratios, the classic use, as well as the way decibels are used 

@@ -1,0 +1,11 @@
+that p9 should be about 100 5v, but choosing 50 5v makes the meter active
+at lower signal levels, and meets the iaru recommendation for an s 9
+reading.  setting 5 db/s unit is an option with an s 0 to s 9 meter range
+to 45 db.  however, the required gain of the receiver may still be a bit
+marginal.  moving pt to 67 dbm 100 5v helps this situation should you
+choose a 5 db/s unit setting.  the most important characteristic of the s
+meter is a consistent db/s unit value.  nearly all on air reports are
+relative readings comparing antennas or amplifiers, so consistent db/s unit
+sensitivity over the s 1 to s 9 range is of primary importance.  because p9
+and pt change with receiver gain, temperature, band, and frequency within
+the first if, consistency of pt and p9 is pretty much a pipe dream for an s

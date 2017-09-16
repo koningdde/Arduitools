@@ -1,0 +1,13 @@
+text is from june 2015 qst  page 55
+
+loads, transmitter output power should be reduced to avoid arcing or
+component damage.  setup  previous antenna tuners i have reviewed for qst
+were evaluated at my operating position in my basement.  recently i have
+made some station changes and generally operate from upstairs in my first
+floor office, while the old basement location is now dedicated to stations
+using vintage equipment.  i have a 135 foot dipole fed in the center with
+450 window line.  my basement station is about 30 feet from the window
+entrance panel.  my first floor office is about 50 feet from the window
+entrance.  i have coax runs from the entrance panel to both locations, and
+quick push on coax connectors to allow easy switching.  i have a window
+line run to the basement station, and one to the office station, but it

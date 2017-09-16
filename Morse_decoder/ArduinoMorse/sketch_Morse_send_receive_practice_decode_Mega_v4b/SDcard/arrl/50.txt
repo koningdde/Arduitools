@@ -1,0 +1,11 @@
+db/s unit to 7 db/s unit.  be aware that you cant use any old operational
+amplifier because the input and output voltage of the amplifiers must be
+able to accommodate 0r8 v, which is close to the positive rail of 0 v.  the
+tlv2372 has input and output capability all the way to the supply rails
+potentiometer r2 zero provides a zero adjustment for the s meter, which is
+buffered through amplifier u1b.  the zero function operates differently
+from most.  diode d3 transforms the amplifier into a precision rectifier.
+the result is that the s meter cannot be driven below zero.  the reason for
+adding this feature is that if the value of c137 see figure 1 is increased
+by a large amount in order to increase the agc decay time as i did in my
+receiver, switching from standby to operate can result in a negative meter

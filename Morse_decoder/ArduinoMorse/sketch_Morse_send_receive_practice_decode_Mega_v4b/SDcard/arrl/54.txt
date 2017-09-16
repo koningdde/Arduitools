@@ -1,0 +1,11 @@
+antenna the radio is silent.  a that is a key distinction, because the cure
+is quite different for the two cases.  to find out, insert, say, 10 db of
+attenuation in the front end of your receiver many transceivers can do this
+with a front panel button.  if the signal is coming from outside on the
+receive frequency, it will drop by 10 db, or almost 2 s units.  if it is a
+third order intermodulation product generated from off frequency signals
+mixing within your receiver, it will drop by 3 x 10 db or 5 s units check
+your s meter calibration on a known signal in the same band first.  if it
+is a signal on your frequency, about the only hope is one of the cancelling
+type noise reduction devices, although you may get some relief by turning
+your beam to a null in the stations direction.  you also could try to

@@ -1,0 +1,11 @@
+case a single pole single throw spst switch, can be used to select between
+a unidirectional pattern or bidirectional pattern as shown.  this is
+especially helpful at frequencies below 3 mhz where the sensitivity of the
+array is much less than that of a single loop.  the switch can be
+implemented as a manual or a relay switch directed by a remote control.
+cabling for the enhanced array is shown in figure 13.  all cables are 75 rg
+6 using type f connectors.  in this picture, the loop feed lines are shown
+as connected to the switch module in this case, a remote controlled relay
+switch.  the delay and reference lines are connected between the switch
+module and the combiner amplifier.  the signal out line from the combiner
+amplifier runs from the array to a receiver in the shack.  as mentioned

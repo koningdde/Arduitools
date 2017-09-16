@@ -1,0 +1,11 @@
+early days of the new mode, the ssb rf signal was typically generated at 9
+mhz.  that may seem an odd choice until you consider that if you mixed this
+signal with the output of a vfo operating in a range from 5 to 5r5 mhz, you
+could use the heterodyne method to combine the two signals and generate an
+rf output on two bands.  it worked like this when you combined the 5 to 5r5
+mhz vfo signal with the 9 mhz ssb signal the sum was a signal between 14
+and 14r5 mhz, which provided coverage across the 20 meter band.  take the
+difference instead and you get an output in the 80 meter band 3r5 to 4 mhz.
+engineers quickly discovered that with the proper application of this
+heterodyne sleight of hand, they could create a single circuit capable of
+generating both the transmit and receive frequencies.  now a single radio,

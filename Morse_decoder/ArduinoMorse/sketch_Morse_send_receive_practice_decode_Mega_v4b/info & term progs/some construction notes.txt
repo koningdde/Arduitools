@@ -1,0 +1,73 @@
+Put the Mega in the box. Use a pencil to see where to use a hack saw to cut the case for the two protruding connectors.
+At the other end of the box, find the center of the bottom piece of box (with the 4 holes) both horizontally & vertically.
+Mark and drill a small hole to be enlarged as required for the paddle/straight key jack.
+Update - If you want to use the keyer option mount two jacks so perhaps not mount one in the center.
+
+You may have to grind the area inside the box so that the jack protrudes far enough to put the nut securely enough to 
+tighten it and hold the jack in place. I used a little Dremel grinding wheel stone in a drill press.
+
+Mount the SDcard module on the top of the box but not in the center. 
+Work out how to mount it and the relay board and still be able to insert/remove the tf card.
+Update - I have found a much smaller reed relay and this is no longer a problem. See parts list and below.
+For the SDcard module I tapped the front two holes for 3mm screws but you can use 2mm screws & nuts. 
+Mount allowing for clearance to insert the tf card easily and away from jumpers on the Mega so there is no problem 
+closing the box.
+
+I used a free standing piezo buzzer but the one in the part list should be screwed down or hot glued or use 2 sided tape.
+I made no hole in the case for the sounder. I expect the tone is more pleasing this way. You may want a hole.
+Update - I've made a hole for more volume. Hot glued the sounder over the hole.
+I cut one largish rubber foot into 4 pieces for the bottom of the box. It does not look great but works well.
+Two screw heads are protruding down there to fix the Mega to the box. One in front. One in back on the same side. 3mm. 
+Maybe putting the nuts on the bottom would allow enough room to use 4 screws. No need to.
+So I used feet. I was also concerned the box might vibrate sometimes and that sound would be annoying.
+
+I highly suggest you use the jumper kit to interconnect. 
+
+You can cut one end of the jumpers and solder to the stereo jacks.
+
+I found two self tapping screws to hold the box together.
+A hardware store may have just the screws & nuts you need instead of ordering the assortment I recommended.
+You may also find cheaper rubber feet that are perfect.
+Any resistor between 10k & 470k can be used for the battery option so you don't need that kit. 
+I did nothing fancy about installing the resistor.
+A one watt may (would) fit the female Mega connectors better than a 1/4 watt. Less flimsy. No problem yet.
+
+Update! - now with a modified WB7FHC's Morse Code Decoder v.1.1
+A mic and preamp required for this feature. You might also want to include a NE567 tone decoder. I have not.
+I used a mudule for this. Simple, perfect and cheap! You do have to add a resistor across + and out.
+100k to 470k 1/8 watt will do. Easy to do on the little board. Mount the mic on the opposite side of the board 
+that you mount the 3 connectors. You want them facing in opposite directions.
+http://www.banggood.com/CJMCU-9812-MAX9812L-Electret-Microphone-Amplifier-Development-Board-Sensor-Module-For-Arduino-p-1103128.html?rmmds=myorder
+
+There is enough room to throw it all together though. 
+One change I'd suggest is to use a 5v reed relay instead of the relay board. Banggood does not sell this. 
+Just ordered 5V Relay SIP-1A05 4PIN for 0.61 Euros. It's tiny! 
+Does not include a snubber diode. You need to add a 1n48 or other diode across the coil connections. 
+Connect the 'bar' end of the diode to the + side of the coil. (backwords) This must be done to protect the Mega.
+Power this module from the 3.3v pin on the Mega. Not the 5v!
+Connect to the relay with small very flexable wires! Then cover with hot glue. The connectors will break off easily!
+I bought the relay by ordering a bag of 5. Glad I did.
+
+Morse Mega pin data:
+
+A0 mic board analog in
+A5 & Vin 100k resistor
+
+D2 dit paddle in or stright key in
+D3 dah paddle in
+D8 & gnd speaker
+D9 keyer relay board control input
+D13 signal pin out - use to control an external oscillator, if desired
+
+Sd card pinout for Mega:
+gnd
+vcc
+miso     50
+mosi     51
+sck      52
+cs       53 <---------53 must be an output pin
+
+The ICSP headers are a source for v5 & gnd.
+paddle, relay, speaker, mic, SDcard, need a gnd connection. 
+You could make 3 'y' cables to do this, for instance.
+relay, mic, SDcard need 5v. A 1 to 3 cable will provide for this.

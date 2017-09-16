@@ -1,0 +1,11 @@
+cross needle meter with scales for forward and reflected power, with swr
+read at the intersection of the two needles.  then there are four 7 segment
+led digital displays.  not visible in the photo is a bar graph display
+along the top of the lcd information display.  you can measure forward and
+reflected power as well as swr.  would you like that to be average or peak
+power?  okay.  maybe you would like to subtract the reflected power from
+the forward power, to display the actual power delivered to the load.
+okay.  your choice of peak or average power will be displayed on the cross
+needle analog meter.  would you prefer a 7 segment led digital display?
+you can have that, too.  how about a simple bar graph for a quick visual
+indication of any of those parameters?  the mb 1 has you covered.  but

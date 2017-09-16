@@ -1,0 +1,11 @@
+diameter with a screw on lid.  a stainless steel screw through the top
+serves as an anchor for the antenna and is connected to the inner lead of
+an so 239 socket at the base of the abs pipe section.  the shield of the so
+239 is connected to the ground block with heavy gauge metal.  the ground
+radial system is a critical part of the antenna.  as an initial experiment
+i used just two 65 foot pieces of insulated wire laid on the ground.  i was
+able to tune the antenna and they actually worked quite well for
+continental contacts.  however, for dx a more extensive ground system is
+required and at present, i have 40 radials, each 20 to 80 feet long,
+connected to the ground junction block.  the radials are 15 awg zinc coated
+wire.  after burying the radials they were soon covered by the surrounding

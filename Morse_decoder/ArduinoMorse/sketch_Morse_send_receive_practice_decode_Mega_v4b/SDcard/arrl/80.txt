@@ -1,0 +1,11 @@
+spectraplus professional edition, version 5r0 software from pioneer hill
+software.  the software allows postprocessing analysis in the time domain,
+frequency domain, and variants of the frequency domain processing.  the
+spectra software provides very accurate timing cursors to determine times
+between events and event occurrence times.  my recorded data was digitized
+to 16 bits.  spectra used a 4096 point fft to produce the results shown in
+the spectrogram.  the data overlap was 90.  the time resolution was 8r63
+ms, and each pixel is approximately 12 hz wide in frequency.  starting at
+the far left of figure 2, the first event is the 60r9 ms dit transmission
+period.  since the receiver is off, amplitude is depicted in dark blue.
+moving to the right, the receiver is switched back on, and a field of green

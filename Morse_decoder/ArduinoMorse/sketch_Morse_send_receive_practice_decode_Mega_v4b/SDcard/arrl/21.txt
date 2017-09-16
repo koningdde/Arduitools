@@ -1,0 +1,11 @@
+most available non amateur headsets these days are wired for stereo
+interconnection.  i chose to use a three conductor phone jack for the
+headphones.  the ring and the tip are wired together at the jack so that
+both sides of the headphones get the same audio signal.  phones with 1/4
+inch jacks will plug in directly.  if you have a headset with a
+subminiature plug, adapters to fit the stereo phone jacks are universally
+available.  i used another rca phono jack for the receiver audio interface
+j2.  older gear and even some recent gear will have a mono audio output, so
+cable interfacing is simple.  more recent gear may have stereo output and
+you need to check the wiring diagram to see what your options may be.  you
+dont want to short out any audio signal on the ring so avoid using a mono

@@ -1,0 +1,11 @@
+labeled alphanumerically, up to seven characters, instead of a frequency
+display.  other features worth noting are an auto dialer with nine dtmf
+memories and a vox function.  the program scan function allows for up to
+three programmable scanning ranges.  theres a somewhat annoying alert
+function that transmits alternating dtmf tones for 5 seconds.  i dont think
+that would go over well on my local repeater.  software while alinco offers
+free dj v57 clone utility software figure 1 for download from their
+website, the optional erw 7 usb programming cable and eds 10 adapter must
+be purchased.  a serial cable is also available.  the software installation
+is simple enough, but i recommend the user carefully read the instructions.
+i found the software to be unsophisticated and not intuitive.  to enter the

@@ -1,0 +1,11 @@
+transmit on that frequency.  the mfj 994brt and mfj998rt will retune and
+store the new tuning data for that frequency only.  all other previously
+stored memory locations will be unaffected.  tuner measurements i performed
+resistive matching range and loss testing with a precision setup similar to
+that used in the arrl lab.  this is a good way to systematically check an
+auto tuners ability to match a wide variety of loads.  while resistive
+matching tests are great for standard antenna tuner comparison testing,
+remote tuners will experience maximum inductance and highest rf current
+with short antennas, so antenna tuner losses can be higher under these
+conditions.  to determine auto tuner losses in more real world conditions,
+i built two antenna simulator circuits.  one is based on the tuners minimum

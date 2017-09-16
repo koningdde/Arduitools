@@ -1,0 +1,39 @@
+To write files through the Arduino I recommend Tera Term.
+You can drag a file to it or use copy, right click.
+When all bytes are transfered press ESC to close the file.
+Set transfer delay to 1ms.
+
+More info in other files.
+
+or read below:
+
+To write a textfile (w number), (without removing the SD card):
+(for more help on this see 'wFilehlp.txt
+
+Make the file in a text editor and make the last character char[129] or char[04].
+This can be a problem. One solution is to make a batch file to do it.
+Open a text editor and copy these two lines:
+(or copy/paste the odd char after echo on the second line below to the end of your file)
+(Grab it from this textfile. You may not see it on screen.)
+
+@echo Adding an EOF marker to file: %1
+@echo  >>%1
+
+The bat file is included in the zip package.
+
+Then save it as 129.bat and put it somewhere in the "path". (c:\windows\129.bat)
+Run it this way from the command line. 129 textfile. Ex: 129 3
+Your filenames will be JUST numbers! So your first file will be 0.
+So...129 0 will put the End Of File marker at the end of your textfile.
+Now find a terminal program that can send a textfile.
+Tera Term works very well for this! It's free & small.
+For your terminal monitor I recommend PuTTY Extra. It's free too.
+http://www.extraputty.com/download.php
+For sending a file to the Arduino I suggest the free terminal program Tera Term:
+https://ttssh2.osdn.jp/
+
+NOTE: You can not have two terminal programs adress a port at the same time.
+Use one terminal program to set the Arduino up to receive the file and to send it.
+(you could also use a computer to put files on the SDcard. How 'bout that :-)
+
+I use Windows and have little experience with Linux and no experience with the MAC system.

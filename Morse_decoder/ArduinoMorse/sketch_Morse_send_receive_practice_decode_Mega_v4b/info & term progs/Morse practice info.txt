@@ -1,0 +1,17 @@
+Do you play with the Arduino Mega? Want to?
+I have written a comprehensive code practice software for receive.
+It also includes a send by paddle or straight key feature that checks your timing.
+Too many features to list here!
+You can download the whole package (zip) including parts list (5 or 7 items!)'
+Includes where to get the parts, (cheap & no shipping charge),
+and full software listing for Mega!
+
+update! - now with a modified WB7FHC's Morse Code Decoder v.1.1 and a keyer
+
+Requires computer terminal program for receive. No computer required for sending. 
+(basic oscillator support for paddle & straight key + wpm adjust in software for battey operation)
+
+All I want is some feedback if you try it. 
+(c) Barry Block
+https://www.facebook.com/barry.block.7
+b5@xs4all.nl

@@ -1,0 +1,11 @@
+both directions with software i had on my pc including ham radio deluxe and
+n1mm contest logger.  for those with newer computers that have usb rather
+than serial connectors, yaesu offers the scu 17 usb interface unit.  in
+addition to making the serial to usb transition, it simplifies data and
+rtty operation.  ill have more detail on this feature later.  internal
+antenna tuner the ftdx1200 includes a relay operated automatic antenna
+tuner with 100 frequency memories as standard equipment.  it can be
+selected to operate with either antenna port on a band by band basis.  as
+mentioned previously, tuner settings for various band segments can be
+memorized with the band stacking register.  the internal tuner is rated for
+up to a 3 1 swr most useful for trimming up a matched antenna at the band

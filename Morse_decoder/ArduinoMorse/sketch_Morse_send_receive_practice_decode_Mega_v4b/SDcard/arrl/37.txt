@@ -1,0 +1,11 @@
+channels 25 pairs and 4 call channels.  also, 26 memory banks, a to z, can
+be used to store groups of operating channels, and so on.  up to 100
+channels can be assigned to a bank.  i programmed memory channels using the
+rt systems www. rtsystemsinc. com software and cable, with thanks to scott
+freudenthal, k2lsf, from jacksonville, florida, for sending me his
+incredible memory channel file, and for his patient mentoring you can catch
+him on reflector 037c.  the software and cable work great with the id 51a.
+it is easy to use, and will have your memories uploaded and in use within
+just minutes.  all of the necessary memory channel data fields are there,
+and many more.  icoms cs 51 programming software comes on the cd packed
+with the radio.  further, a programming cable is not absolutely necessary

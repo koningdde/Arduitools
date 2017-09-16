@@ -1,0 +1,12 @@
+audio coming from you via the bluetooth connection in other words, whenever
+you speak or when the digital mode software on your computer starts sending
+transmit audio.  before fiddling with these knobs, however, you must first
+establish the bluetooth connection by pairing the rigblaster blue with
+whatever bluetooth device you are using whether that is a headset, laptop
+or tablet.  without going into great detail the rigblaster manual offers
+step by step instructions, it is essentially a matter of pressing whatever
+buttons are required to put your device into discovery mode.  you do the
+same to the rigblaster blue.  it may take as long as 60 seconds, but
+eventually the interface and your device find each other, exchange
+greetings and strike up a conversation so to speak.  in my first test i
+

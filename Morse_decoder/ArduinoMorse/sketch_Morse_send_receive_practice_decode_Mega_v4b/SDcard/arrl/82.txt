@@ -1,0 +1,11 @@
+development environment supplied by the display manufacturer.  i divided
+the user interface figure 7 into four screens frequency, power level,
+preset, and sweep.  the frequency screen allows the user to set the
+generator frequency using variable step sizes or direct entry in hz, khz,
+or mhz, with the on screen freq touch keypad.  set the output level using
+the level screen virtual keypad in increments of 0r2, 1, or 10 db, or
+directly enter a value in dbm.  my level screen has preset buttons for 1
+uv, s9, and 0 dbm output levels.  the preset screen allows you to store up
+to 10 frequency level combinations for later recall.  the freq, level, and
+preset functions display frequency and level readouts as well as an rf
+on/off control.  enter the parameters for a frequency sweep on the sweep

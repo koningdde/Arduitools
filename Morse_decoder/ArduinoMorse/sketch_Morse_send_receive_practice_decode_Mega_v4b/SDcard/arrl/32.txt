@@ -1,0 +1,11 @@
+potential difference between pins 2 and 1.  the set coils were controlled
+by either a two input nor gate or a single logic inverter.  if the logical
+control signals caused an output potential to fall to zero the coil would
+conduct a current of about 16 ma to ground causing the switch to close.
+the three reed relay switches in figure 8 allowed element 1 to be connected
+to either the lead feeder using logic terminal a, the central feeder with c
+or d and the rear feeder with f.  this allowed the antenna element to
+fulfill its correct role in any of the four directions of diagonal fire.
+the relays latching capability allowed it to remember either state after
+excitation of the coils had been removed.  any selection, set, operation
+had always to be preceded by the reset operation.  the logical nor gates

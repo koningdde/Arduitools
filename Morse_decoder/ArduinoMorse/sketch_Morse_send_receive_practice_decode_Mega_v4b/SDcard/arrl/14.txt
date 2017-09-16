@@ -1,0 +1,11 @@
+loading coil values.  coil inductance is adjusted by squeezing the turns
+together more inductance or spreading them apart less inductance.  as you
+might expect, changing the 20 meter settings also required some tweaking of
+coils on the higher bands.  all told, it took a bit more than a half hour
+of adjustment and checking to get the antenna tuned to where i wanted it.
+the final settings are given in table 3.  the two 20 meter tuning positions
+overlap enough to keep swr below 2 1 from the bottom of the band to about
+14r300 mhz.  my rigs internal tuner easily handled the mismatch above
+14r300 mhz.  since the q 52 is likely to be installed at low heights, near
+roofs and buildings, and in the vicinity of other antennas, owners should
+expect to have to adjust the antennas tuning on the lower bands, at least.

@@ -1,0 +1,11 @@
+through the software the thought process behind the pic software that is
+loaded into the microcontroller of the interface project goes something
+like this determine the operating mode desired from the setting of the mode
+switch of the interface, either u/v uhf uplink/vhf downlink or v/u vhf
+uplink/uhf downlink.  wait for and read valid frequency commands from
+satpc32.  store the frequencies into temporary variables for vhf frequency
+and uhf frequency as appropriate.  check the status of the ptt switch on
+the interface board.  if the ptt switch is open in receive mode, send the
+appropriate receive frequency to the 817 depends on the mode switch.  a1 go
+back to step 1.  if the ptt switch is closed radio switched to transmit,
+send a command to toggle the vfo and then sent the appropriate transmit

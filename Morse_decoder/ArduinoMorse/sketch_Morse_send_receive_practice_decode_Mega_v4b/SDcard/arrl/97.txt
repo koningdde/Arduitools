@@ -1,0 +1,13 @@
+text is from june 2015 qst  page 63
+
+propagation mode and polarization should not matter much.  a big difference
+between 1960 and now, is the level of background noise due to all the
+household electronic devices that have been fielded since then.  this can
+easily bring the noise level up 30 db, especially on the lower bands.
+there goes your s/n.  senior arrl lab engineer zack lau, w1vt, contributes
+the thought that urbanization may be at play.  regions that used to provide
+good ground wave paths 50 years ago, have often been broken up by such
+barriers as concrete overpasses and buildings.  while they wont be in every
+direction, they can result in a hit or miss situation.  there may be other
+factors as well, and of course you may be experiencing the combination of
+multiple effects simultaneously.  q  asks my condominium board is

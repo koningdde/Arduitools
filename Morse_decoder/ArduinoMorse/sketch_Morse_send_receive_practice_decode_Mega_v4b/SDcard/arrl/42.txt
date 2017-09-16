@@ -1,0 +1,11 @@
+a traditional analog filter is made narrower than a few hundred hertz, it
+suffers from ringing, which makes noise and signals sound very similar.
+however, dr allen katz, k2uyh, professor of electrical and computer
+engineering, ieee fellow, and a longtime eme operator says that a trained
+ear can have effective bandwidth of perhaps 50 hz some eme operators can
+hear amazingly weak signals.  a digital filter can be much narrower than an
+analog one without any ringing.  the waterfall display breaks the band up
+into many narrow filters and displays the signal level in each one.  after
+some experimenting with the hdsdr program, i found a filter bandwidth of 3
+to 6 hz for the waterfall display best for finding weak signals.  other
+programs might have other optimum values.  simple sdr my first sdr

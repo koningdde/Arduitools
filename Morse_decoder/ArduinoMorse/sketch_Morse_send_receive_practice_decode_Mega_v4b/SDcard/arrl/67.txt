@@ -1,0 +1,11 @@
+indicator, and some the complete antenna impedance as a complex number that
+looks like r jx.  to find the dipoles impedance, we need to put the r and x
+values together as a complex number that is made up of three pieces the
+first 4 is resistance and its real, the second is the operator / , and the
+last, reactance, j1590 is imaginary.  you know that resistance is in ohms
+and reactance is also in ohms.  ohms 1 ohms is nice and simple why not just
+leave it at that?  why put the j in there to complicate things?  dont let
+that imaginary j part bring back some terrible high school memories.
+theres no test to worry about, so take a few deep breaths and chill out.
+now, lets get real about the imaginary j.  a fundamental difference the j
+is there to remind us of the fundamental difference between a resistance

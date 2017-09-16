@@ -1,0 +1,11 @@
+control.  once youve found this, you really dont need to play with the
+phasing.  now tune in some real cw signals, using your bandspread, and note
+how sharp and selective it is.  unless youre a safecracker, its easy to
+completely scoot by the sweet spot and never realize the advantage of the
+crystal filter.  once you do find the sweet spot, its best to adjust the
+bfo afterward for a comfortable pitch.  i regret that bfo pitch is no
+longer a front panel control on modern radios.  on most vintage receivers,
+its helpful to run the audio gain wide open and use the rf gain as a volume
+control, especially on cw.  although not directly related to the issue, it
+should be noted that most early cw receivers had very weak bfos, which is
+never an advantage, contrary to some advice of the time.  this resulted in

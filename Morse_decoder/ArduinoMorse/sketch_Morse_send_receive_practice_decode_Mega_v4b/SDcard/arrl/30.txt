@@ -1,0 +1,11 @@
+first.  beyond that, you populate the boards as you see fit.  all of the
+components you will install are through hole parts.  you will not have to
+solder any surface mount devices.  the mb 1 uses a surface mount
+microprocessor, but its on a daughter board that comes assembled.  the
+microchip pic18f8722 microprocessor and various surface mount components
+are already soldered in place.  the lcd board also comes as a small, fully
+assembled daughter card that plugs into the display board.  i did not need
+any special tools to build the mb 1.  i have a temperature controlled
+soldering station with a fine tip, assorted hand tools and a magnifier lamp
+on an extension arm that i find increasingly handy for reading color codes
+and component values.  these are all standard fare for any builder, i

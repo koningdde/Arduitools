@@ -1,0 +1,11 @@
+very informative.  more on predicting sag in wire antennas january 1966 i
+wrote the article predicting sag in long wire antennas which appeared in
+the january 1966 issue of qst.  that article had an error in it when
+published in 1966.  the nomograph was off by a factor of 2.  in order to
+correct it later, my editor byron goodman, w1dx, i believe decided it was
+easier to edit the span in figure 1 to be shown as of the total span,
+rather than adjust the nomograph itself.  that did correct the error,
+although it probably led to some of the ongoing confusion.  several arrl
+editors have asked me questions about the drawing and nomograph over the
+years, probably when changes were being made to the arrl antenna book.  a
+battery monitor for 12 v systems june 2013 mert nellis, w0ufo, outlined a

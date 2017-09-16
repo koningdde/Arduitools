@@ -1,0 +1,11 @@
+the flexibility of digital filters and signal processing.  this makes the
+reception of shortwave signals much clearer.  msdr version 2 allows the use
+of the radios hand mic for voice.  for the ft 817 this requires the
+presence of an optional filter.  the software supports individual mode
+setups that allow the transceiver to switch modes simultaneously with the
+software and the regular hand microphone can be used to switch to transmit.
+this is called lock to txcr.  more details on this can be found in the
+software manual that is part of the software download.  most hf radios
+provide one or more option slots for high quality, multipole crystal
+filters for ssb and cw.  this is the perfect spot for the lif extraction
+without having to modify the radio.  this port is bidirectional.  this
