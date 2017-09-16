@@ -25,6 +25,7 @@
 
 #include <ESP8266WiFi.h>
 #include <PubSubClient.h>
+#include <NewRemoteTransmitter.h>
 
 const char* ssid = "Jupiter";
 const char* password = "3827310955370393";
@@ -45,10 +46,10 @@ int inputPin = 13;
 int val = 0; 
 
 unsigned long last;
-unsigned long interval = 300000; //Interval to send sensor data
+unsigned long interval = 3000000; //Interval to send sensor data
 
 unsigned long lastmotion = 0;
-unsigned long intervalmotion = 60000; //Interval to send sensor data
+unsigned long intervalmotion = 600000; //Interval to send sensor data
 
 WiFiClient espClient;
 PubSubClient client(espClient);
@@ -57,6 +58,8 @@ PubSubClient client(espClient);
 
 
 void setup() {
+  pinMode(5, OUTPUT);   
+  digitalWrite(5, HIGH);
   pinMode(inputPin, INPUT_PULLUP);     // declare sensor as input
   Serial.begin(115200);
   setup_wifi();
@@ -83,7 +86,6 @@ void loop() {
 
   //Read conndcted sensors
   val = digitalRead(inputPin);  // read input value
-  
  
     if (val == HIGH && ((millis() - lastmotion) >= intervalmotion)) 
       { // check if the input is HIGH   
@@ -220,6 +222,9 @@ void callback(char* topic, byte* payload, unsigned int length) {
       case 'r':
        relayOut( (char)payload[2],(char)payload[3] );
        break;
+       case 'k':
+       kkOut( (char)payload[2],(char)payload[3] );
+       break;
     }//end switch case
     }//enf first iff
   
@@ -245,3 +250,39 @@ void reconnect() {
     }
   }
 }
+
+void kkOut(char adres, char state){
+
+  NewRemoteTransmitter transmitter(23791134 , 16, 269);
+  
+    switch (adres) {
+    case '0':  
+            switch (state){
+            case '0':
+                transmitter.sendUnit(0, 0);
+                Serial.print("OFF");
+                delay(100);
+            break;
+        
+            case '9':
+                transmitter.sendUnit(0, 9);
+                Serial.print("ON");
+                delay(100);
+            break;
+            }//end cade 0
+    case '1':  
+            switch (state){
+            case '0':
+                transmitter.sendUnit(0, 0);
+                Serial.print("OFF");
+                delay(100);
+            break;       
+            case '9':
+                transmitter.sendUnit(0, 9);
+                Serial.print("ON");
+                delay(100);
+        break;
+        
+      }//end case 1
+}//end switch adres
+}//end kkout   
