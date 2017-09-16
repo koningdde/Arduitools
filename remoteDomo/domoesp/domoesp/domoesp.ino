@@ -265,7 +265,7 @@ void kkOut(char adres, char state){
             break;
         
             case '9':
-                transmitter.sendUnit(0, 9);
+                transmitter.sendUnit(0, 1);
                 Serial.print("ON");
                 delay(100);
             break;
@@ -278,7 +278,7 @@ void kkOut(char adres, char state){
                 delay(100);
             break;       
             case '9':
-                transmitter.sendUnit(0, 9);
+                transmitter.sendUnit(0, 1);
                 Serial.print("ON");
                 delay(100);
         break;
