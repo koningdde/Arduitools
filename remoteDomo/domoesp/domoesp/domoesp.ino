@@ -36,37 +36,42 @@ char unitId = '6'; //Unit id
 int idx1 = 999; //IDX number for domoticz
 float data1 = 0.0; //Datapoint
 float data2 = 0;
-int relay4 = 22; //Hardwire output
-int relay3 = 24; //Hardwire output
-int relay1 = 26; //Hardwire output
-int relay2 = 34; //Hardwire output
 
-bool pirstate = LOW;
+//int relay1 = 26; //Hardwire output
+//int relay2 = 34; //Hardwire output
+
+//bool pirstate = LOW;
+bool pirmem = LOW;
 int inputPin = 13;
 int val = 0; 
+int BLAUW = 5;
+int GEEL = 14;
+int ROOD = 12;
 
 unsigned long last;
-unsigned long interval = 3000000; //Interval to send sensor data
+unsigned long interval = 300000; //Interval to send sensor data
 
 unsigned long lastmotion = 0;
-unsigned long intervalmotion = 600000; //Interval to send sensor data
+unsigned long intervalmotion = 900000; //Interval to send sensor data
 
 WiFiClient espClient;
 PubSubClient client(espClient);
 
-
-
-
 void setup() {
-  pinMode(5, OUTPUT);   
-  digitalWrite(5, HIGH);
+  pinMode(BLAUW, OUTPUT); 
+  pinMode(GEEL, OUTPUT); 
+  pinMode(ROOD, OUTPUT);
+  digitalWrite(BLAUW,HIGH);
+  digitalWrite(GEEL,HIGH);
+  digitalWrite(ROOD,HIGH);   
   pinMode(inputPin, INPUT_PULLUP);     // declare sensor as input
   Serial.begin(115200);
   setup_wifi();
   client.setServer(mqtt_server, 1883);
-  client.setCallback(callback);
-  pinMode(5, OUTPUT);   
-  digitalWrite(5, HIGH);
+  client.setCallback(callback); 
+  digitalWrite(BLAUW,LOW);
+  digitalWrite(GEEL,LOW);
+  digitalWrite(ROOD,LOW);   
 }
 
 void loop() {
@@ -84,26 +89,35 @@ void loop() {
     last = millis();   
   }
 
-  //Read conndcted sensors
-  val = digitalRead(inputPin);  // read input value
- 
-    if (val == HIGH && ((millis() - lastmotion) >= intervalmotion)) 
-      { // check if the input is HIGH   
-        lightOut(116,"On"); //idx 26, uit, sturen naar domoticz
-        Serial.println("Motion detected!");
-        // We only want to print on the output change, not state
-        lastmotion = millis();
-        pirstate = HIGH;
+  //Read connected sensors
+val = digitalRead(inputPin);  // read input value
+
+if (val == HIGH && pirmem == LOW)
+      {
+      lightOut(116,"On"); //idx 26, uit, sturen naar domoticz
+      Serial.println("Motion detected!");
+      digitalWrite(BLAUW,HIGH);
+      pirmem = HIGH;
       }
-    else if (val == LOW && pirstate == HIGH && ((millis() - lastmotion) >= intervalmotion)) 
+
+if (((millis() - lastmotion) >= intervalmotion) && (val == LOW))
     {   
-        // we have just turned of
         lightOut(116,"Off"); //idx 26, uit, sturen naar domoticz
         Serial.println("Motion ended!");
-        pirstate = LOW;
-        // We only want to print on the output change, not state
+         digitalWrite(BLAUW,LOW);
+         pirmem= LOW;
+         lastmotion = millis();
+    }
+
+if (((millis() - lastmotion) >= intervalmotion) && (val == HIGH))
+       {
+            lightOut(116,"On"); //idx 26, uit, sturen naar domoticz
+            Serial.println("Motion detected!");
+            digitalWrite(BLAUW,HIGH);
+            lastmotion = millis();
       }
-   
+  
+    
 }//end main loop
 
 void sensorDataout(int idx, float data, int data2){
@@ -130,40 +144,40 @@ void relayOut(char relay, char state){
     case '0':  
       switch (state){
         case '0':
-        digitalWrite(relay1, LOW);
+        digitalWrite(ROOD, LOW);
         break;
         case '9':
-        digitalWrite(relay1, HIGH);
+        digitalWrite(ROOD, HIGH);
         break;
       }
     break;   
     case '1':  
       switch (state){
         case '0':
-        digitalWrite(relay2, LOW);
+        digitalWrite(GEEL, LOW);
         break;
         case '9':
-        digitalWrite(relay2, HIGH);
+        digitalWrite(GEEL, HIGH);
         break;
       }
     break;
     case '2':  
       switch (state){
         case '0':
-        digitalWrite(relay3, LOW);
+        digitalWrite(BLAUW, LOW);
         break;
         case '9':
-        digitalWrite(relay3, HIGH);
+        digitalWrite(BLAUW, HIGH);
         break;
       }
     break;
     case '3':  
       switch (state){
         case '0':
-        digitalWrite(relay4, LOW);
+        digitalWrite(ROOD, LOW);
         break;
         case '9':
-        digitalWrite(relay4, HIGH);
+        digitalWrite(ROOD, HIGH);
         break;
       }
     break;   
@@ -254,33 +268,31 @@ void reconnect() {
 void kkOut(char adres, char state){
 
   NewRemoteTransmitter transmitter(23791134 , 16, 269);
+  //Serial.println(adres);
   
     switch (adres) {
     case '0':  
             switch (state){
             case '0':
                 transmitter.sendUnit(0, 0);
-                Serial.print("OFF");
-                delay(100);
+                Serial.println("0-OFF");
             break;
         
             case '9':
                 transmitter.sendUnit(0, 1);
-                Serial.print("ON");
-                delay(100);
+                Serial.println("0-ON");
             break;
             }//end cade 0
+        break;    
     case '1':  
             switch (state){
             case '0':
-                transmitter.sendUnit(0, 0);
-                Serial.print("OFF");
-                delay(100);
+                transmitter.sendUnit(1, 0);
+                Serial.println("1-OFF");
             break;       
             case '9':
-                transmitter.sendUnit(0, 1);
-                Serial.print("ON");
-                delay(100);
+                transmitter.sendUnit(1, 1);
+                Serial.println("1-ON");
         break;
         
       }//end case 1
