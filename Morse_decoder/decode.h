@@ -2,7 +2,7 @@
 int audioPin = decoderpin;// we read data from the tone detector module here
 int audio = 1;            // will store the value we read on this pin
 int LCDline = 1;          // keeps track of which line we're printing on
-int lineEnd = 21;         // One more than number of characters across display
+int lineEnd = 16;         // One more than number of characters across display
 int letterCount = 0;      // keeps track of how may characters were printed on the line
 int lastWordCount = 0;    // keeps track of how may characters are in the current word
 int lastSpace = 0;        // keeps track of the location of the last 'space'
@@ -13,11 +13,9 @@ int lastSpace = 0;        // keeps track of the location of the last 'space'
 // Our second line of text,
 // and our third line of text
 // For a 20x4 display these are all 20 characters long
-char currentLine[] = "12345678901234567890";
-char    lastWord[] = "                    ";
-char       line1[] = "                    ";
-char       line2[] = "                    ";
-char       line3[] = "                    ";
+char currentLine[] = "1234567890123456";
+char    lastWord[] = "                ";
+char       line1[] = "                ";
 
 boolean ditOrDah = true;  // We have either a full dit or a full dah
 int dit = 10;             // We start by defining a dit as 10 milliseconds

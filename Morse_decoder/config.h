@@ -4,9 +4,9 @@
 #define CQ "CQ CQ";                //Define number of CQ
 #define TEKST2 "Mobile station";  //Template tekst F2
 #define TEKST3 "My name is Danny";   //Template tekst F3
-#define MORSESPEED 100;           //Initial dot lenght
-#define LED 13;                   //Output pin to morse
-#define LED2 3;                   //Morse output to led
+#define MORSESPEED 117;           //Initial dot lenght
+#define LED 3;                   //Output pin to morse
+#define LED2 13;                   //Morse output to led
 #define BUZZER 5;                 //Pin to connect internal buzzer
 #define toneFr 1200;              //Internal buzzer tone freq
 #define red 11;                   //Red pin rgb led

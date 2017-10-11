@@ -10,6 +10,10 @@ PS2Keyboard keyboard;     //Make keyboard
 int i = 0;                //Counter for number off char
 int r;                    //Counter for number off
 
+#include <Wire.h> 
+#include <LiquidCrystal_I2C.h>
+LiquidCrystal_I2C lcd(0x27,16,2);  // set the LCD address to 0x27 for a 16 chars and 2 line display
+
 char mycallout[] = mycall;                //Array for callsign
 char cqout[] = CQ;                        //Array for callsign
 char F2[] = TEKST2;                       //Pre defined tekst F2
@@ -25,12 +29,17 @@ char output3[sizeof(F3) + sizeof(space)];                                       
 char input[40];                                                                  //Array for keyboard input
 
 // the setup routine runs once when you press reset:
-void setup() {  
+void setup() {
+  lcd.init();
+  lcd.backlight();
+  lcd.setCursor(1,0);
+  lcd.print("Morse trainer"); 
+  lcd.setCursor(4,1);
+  lcd.print("Welkom");  
   //Start keyboard
   keyboard.begin(DataPin, IRQpin, PS2Keymap_US);               
   // initialize the digital pins.
   pinMode(led12, OUTPUT); 
-  pinMode(led6, OUTPUT);
   pinMode(audioPin, INPUT); 
   pinMode(ledr, OUTPUT); 
   pinMode(ledg, OUTPUT); 
@@ -48,6 +57,7 @@ void setup() {
   delay(350);
   statusled('b'); //change led to blue
   delay(350);
+  lcd.clear();
 //End of setup  
 }
 
@@ -104,7 +114,7 @@ void loop(){
 }
 
 void sendkeys(int a) {
-
+  lcd.clear();
   statusled('r');
   // Loop through the string and get each character one at a time until the end is reached
   for (int b = 0; b <= a -1 ; b++)
@@ -113,6 +123,14 @@ void sendkeys(int a) {
   char tmpChar = input[b];
   // Set the case to lower case
   tmpChar = toLowerCase(tmpChar);
+  if (b < 16){
+  lcd.setCursor(b,0);
+  }
+  if (b > 15){
+  lcd.setCursor((b-16),1);
+  }
+  
+  lcd.print(tmpChar);
   Serial.print(tmpChar);
   // Call the subroutine to get the morse code equivalent for this character
   GetChar(tmpChar);
@@ -126,6 +144,10 @@ void speedup(){
   statusled('g');
   dotLen = dotLen - 10;     // length of the morse code 'dot'
   correctspeed();
+  lcd.clear();
+  lcd.setCursor(0,0);
+  lcd.print("Speed is: ");
+  lcd.println(dotLen);
   Serial.print("Speed is: ");
   Serial.println(dotLen);
   delay(100);
@@ -135,6 +157,10 @@ void speeddown(){
   statusled('g');
   dotLen = dotLen + 10;     // length of the morse code 'dot'
   correctspeed();
+  lcd.clear();
+  lcd.setCursor(0,0);
+  lcd.print("Speed is: ");
+  lcd.println(dotLen);
   Serial.print("Speed is: ");
   Serial.println(dotLen);
   delay(100);
@@ -153,6 +179,11 @@ void matchSpeed(){
   statusled('g');   //Make nice blue light
   dotLen = (averageDah/3); //Read avarage dash time from RX and set to TX speed
   correctspeed();
+  lcd.clear();
+  lcd.setCursor(0,0);
+  lcd.print("Autospeed is: ");
+  lcd.setCursor(0,1);
+  lcd.println(dotLen);
   Serial.print("Speed is: ");
   Serial.println(dotLen);
   delay(100);
@@ -183,6 +214,12 @@ void changecall(){
   statusled('g');
   boolean hold = true;
   i = 0;
+  for (int i=0; i<8; i++) {
+        mycallout[i]=' ';
+        } 
+  lcd.clear();
+  lcd.setCursor(0,0);
+  lcd.println("Change call:");
   Serial.println("Change call:");
   while(hold){
     if (keyboard.available()) {
@@ -201,6 +238,11 @@ void changecall(){
   }
    output1[sizeof(cqout) + sizeof(space) + sizeof(mycallout) + sizeof(space) + sizeof(k) + sizeof(space)];  //Change array to new size
    sprintf(output1,"%s%s%s%s%s%s",cqout,space,mycallout,space,k,space);                                     //Make new CQ
+   lcd.clear();
+   lcd.setCursor(0,0);
+   lcd.print("call is: ");
+   lcd.setCursor(0,1);
+   lcd.println(mycallout);
    Serial.print("call is: ");
    Serial.println(mycallout);
 }
@@ -216,8 +258,8 @@ void changecall(){
  void keyIsDown() {
    // The decoder is detecting our tone
    // The LEDs on the decoder and Arduino will blink on in unison
-   //digitalWrite(13,1);            // turn on Arduino's LED
-     
+   //digitalWrite(led12,1);            // turn on Arduino's LED
+      
    if (startUpTime>0){
      // We only need to do once, when the key first goes down
      startUpTime=0;    // clear the 'Key Up' timer
@@ -326,14 +368,14 @@ void printSpace() {
   lastSpace=letterCount;         // keep track of this, our last, space
   
   // Now we need to clear all the characters out of our last word array
-  for (int i=0; i<20; i++) {
+  for (int i=0; i<16; i++) {
     lastWord[i]=' ';
    }
    
   lcdGuy=' ';            // this is going to go to the LCD 
   
   // We don't need to print the space if we are at the very end of the line
-  if (letterCount < 20) { 
+  if (letterCount < 16) { 
     sendToLCD();         // go figure out where to put it on the display
  }
 }
@@ -410,6 +452,7 @@ void sendToLCD(){
   }
   
   Serial.print(lcdGuy); // print our character at the current cursor location
+  lcd.print(lcdGuy);
  
 }
 
@@ -418,14 +461,14 @@ void sendToLCD(){
 //////////////////////////////////////////////////////////////////////////////////////////
 
 void newLine() {
-  // sendToLCD() will call this routine when we reach the end of the line
+//  sendToLCD() will call this routine when we reach the end of the line
   if (lastSpace == 0){
     // We just printed an entire line without any spaces in it.
     // We cannot word wrap this one so this character has to go at 
     // the beginning of the next line.
     
     // First we need to clear all the characters out of our last word array
-    for (int i=0; i<20; i++) {
+    for (int i=0; i<16; i++) {
       lastWord[i]=' ';
      }
      
@@ -445,13 +488,13 @@ void truncateOverFlow(){
   if (lastSpace==0) {return;}  // Don't do this if there was no space in the last line
   
   // Move the cursor to the place where the last space was printed on the current line
-  //lcd.setCursor(lastSpace,LCDline);
-  
+  lcd.setCursor(lastSpace,LCDline);
   letterCount = lastSpace;    // Change the letter count to this new shorter length
   
   // Print 'spaces' over the top of all the letters we don't want here any more
-  for (int i = lastSpace; i < 20; i++) {
+  for (int i = lastSpace; i < 15; i++) {
      Serial.print(' ');         // This space goes on the display
+     lcd.print(' ');         // This space goes on the display
      currentLine[i] = ' ';   // This space goes in our array
   }
 }
@@ -471,28 +514,13 @@ void linePrep(){
      case 2:
        // We just finished line 1
        // We are going to move the contents of our current line into the line1 array
-       for (int j=0; j<20; j++){
+       for (int j=0; j<16; j++){
          line1[j] = currentLine[j];
        }
-        break;
-     case 3:
-       // We just finished line 2
-       // We are going to move the contents of our current line into the line2 holding bin
-       for (int j=0; j<20; j++){
-         line2[j] = currentLine[j];
-       }
-       break;
-     case 4:
-       // We just finished line 3
-       // We are going to move the contents of our current line into the line3 holding bin
-       for (int j=0; j<20; j++){
-         line3[j] = currentLine[j];
-       }
-       //This is our bottom line so we will keep coming back here
-       LCDline = 3;  //repeat this line over and over now. There is no such thing as line 4
-       
+       LCDline = 1;  //repeat this line over and over now. There is no such thing as line 4
        myScroll();  //move everything up a line so we can do the bottom one again
-       break;
+        break;   
+    
    }
         
 }
@@ -502,31 +530,14 @@ void myScroll(){
   
   int i = 0;  // we will use this variables in all our for loops
   
-  ////lcd.setCursor(0,0);      // Move the cursor to the top left corner of the display
+  lcd.setCursor(0,0);      // Move the cursor to the top left corner of the display
   Serial.print(line1);        // Print line1 here. Line1 is our second line,
+  lcd.print(line1);
                            // our top line is line0 ... on the next scroll
                            // we toss this away so we don't store line0 anywhere
- 
-  // Move everything stored in our line2 array into our line1 array
-  for (i = 0; i < 20; i++) {
-    line1[i] = line2[i];
-  }
+  lcd.setCursor(0,1);      // Move the cursor to the beginning of the second line
+
   
-  //lcd.setCursor(0,1);      // Move the cursor to the beginning of the second line
-  Serial.print(line1);        // Print the new line1 here
- 
-  // Move everything stored in our line3 array into our line2 array
-  for (i = 0; i < 20; i++) {
-    line2[i]=line3[i];
-  }
-  //lcd.setCursor(0,2);      // Move the cursor to the beginning of the third line
-  Serial.print(line2);        // Print the new line2 here
- 
-  // Move everything stored in our currentLine array into our line3 array
-  for (i = 0; i < 20; i++) {
-    line3[i] = currentLine[i];
-  }
- 
 }
 
 void reprintOverFlow(){
@@ -534,13 +545,13 @@ void reprintOverFlow(){
   // Back on the display at the beginning of the new line
   
   // Load up our current line array with what we have so far
-   for (int i = 0; i < 20; i++) {
+   for (int i = 0; i < 16; i++) {
      currentLine[i] = lastWord[i];
   } 
-  //lcd.setCursor(0, LCDline);              // Move the cursor to the beginning of our new line 
+  lcd.setCursor(0, LCDline);              // Move the cursor to the beginning of our new line 
   Serial.print(lastWord);                    // Print the stuff we just took off the previous line
   letterCount = lastWordCount;            // Set up our character counter to match the text
-  //lcd.setCursor(letterCount, LCDline); 
+  lcd.setCursor(letterCount, LCDline); 
   lastSpace=0;          // clear the last space pointer
   lastWordCount=0;      // clear the last word length
 }

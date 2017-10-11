@@ -25,20 +25,19 @@
 
 #include <ESP8266WiFi.h>
 #include <PubSubClient.h>
-#include <NewRemoteTransmitter.h>
 
 const char* ssid = "Jupiter";
 const char* password = "3827310955370393";
 const char* mqtt_server = "192.168.100.54";
 
-#define clientId "ESPtest"
+#define clientId "ESPWoon"
 char unitId = '6'; //Unit id
 int idx1 = 999; //IDX number for domoticz
 float data1 = 0.0; //Datapoint
 float data2 = 0;
 
-//int relay1 = 26; //Hardwire output
-//int relay2 = 34; //Hardwire output
+int relay1 = 16; //Hardwire output
+int relay2 = 4; //Hardwire output
 
 //bool pirstate = LOW;
 bool pirmem = LOW;
@@ -61,6 +60,8 @@ void setup() {
   pinMode(BLAUW, OUTPUT); 
   pinMode(GEEL, OUTPUT); 
   pinMode(ROOD, OUTPUT);
+  pinMode(relay1, OUTPUT);
+  pinMode(relay2, OUTPUT);
   digitalWrite(BLAUW,HIGH);
   digitalWrite(GEEL,HIGH);
   digitalWrite(ROOD,HIGH);   
@@ -139,7 +140,7 @@ void sensorDataout(int idx, float data, int data2){
 }
 
 void relayOut(char relay, char state){  
-
+  Serial.println("relais");
   switch (relay) {
     case '0':  
       switch (state){
@@ -174,13 +175,27 @@ void relayOut(char relay, char state){
     case '3':  
       switch (state){
         case '0':
-        digitalWrite(ROOD, LOW);
+        Serial.println("relais 1 uit");
+        digitalWrite(relay1, LOW);
         break;
         case '9':
-        digitalWrite(ROOD, HIGH);
+        Serial.println("relais 1 aan");
+        digitalWrite(relay1, HIGH);
         break;
       }
-    break;   
+    break;
+    case '4':  
+      switch (state){
+        case '0':
+        Serial.println("relais 2 uit");
+        digitalWrite(relay2, LOW);
+        break;
+        case '9':
+        Serial.println("relais 2 aan");
+        digitalWrite(relay2, HIGH);
+        break;
+      }
+    break;      
   }
 }
 
@@ -236,9 +251,6 @@ void callback(char* topic, byte* payload, unsigned int length) {
       case 'r':
        relayOut( (char)payload[2],(char)payload[3] );
        break;
-       case 'k':
-       kkOut( (char)payload[2],(char)payload[3] );
-       break;
     }//end switch case
     }//enf first iff
   
@@ -265,36 +277,4 @@ void reconnect() {
   }
 }
 
-void kkOut(char adres, char state){
 
-  NewRemoteTransmitter transmitter(23791134 , 16, 269);
-  //Serial.println(adres);
-  
-    switch (adres) {
-    case '0':  
-            switch (state){
-            case '0':
-                transmitter.sendUnit(0, 0);
-                Serial.println("0-OFF");
-            break;
-        
-            case '9':
-                transmitter.sendUnit(0, 1);
-                Serial.println("0-ON");
-            break;
-            }//end cade 0
-        break;    
-    case '1':  
-            switch (state){
-            case '0':
-                transmitter.sendUnit(1, 0);
-                Serial.println("1-OFF");
-            break;       
-            case '9':
-                transmitter.sendUnit(1, 1);
-                Serial.println("1-ON");
-        break;
-        
-      }//end case 1
-}//end switch adres
-}//end kkout   
