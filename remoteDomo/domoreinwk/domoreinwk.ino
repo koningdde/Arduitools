@@ -10,6 +10,25 @@ Adafruit_BMP085 bmp;
 #define clientId "reinwoon"
 #include "config.h"
 
+//DHT Sensor
+#include "DHT.h"
+#define DHTTYPE DHT11   // DHT 11
+#define DHTPIN 5     // what digital pin we're connected to
+DHT dht(DHTPIN, DHTTYPE);
+
+// Reads the temperature from one DS18B20 sensor
+#include <OneWire.h>
+#include <DS18B20.h>
+
+// 1-Wire bus Arduino pin
+const byte ONEWIRE_PIN = 2;
+byte sensorAddress[8] = {0x28, 0xC3, 0x81, 0x9D, 0x4, 0x0, 0x0, 0x3C};
+
+// 1-Wire object
+OneWire onewire(ONEWIRE_PIN);
+// DS18B20 sensors object
+DS18B20 sensors(&onewire);
+
 // Network settings
 byte mac[]    = {  0xDE, 0xED, 0xBA, 0xFE, 0xAA, 0xAA };
 IPAddress ip(192, 168, 1, 160);
@@ -18,11 +37,11 @@ IPAddress server(192, 168, 1, 101);
 //Variables
 char unitId = '2'; //Unit id
 int idx1 = 26; //IDX number for domoticz
-int idx2 = 60;
-int idx3 = 61;
+int idx2 = 233;
+int idx3 = 234;
 int idx4 = 61;
 float data1 = 0.0; //Datapoint
-float data2 = 0;
+float data2 = 0.0;
 float data3 = 0.0;
 float data4 = 0.0;
 
@@ -40,6 +59,7 @@ unsigned long buzzerShort = (5000);
 int buzShortOn;
 unsigned long lastBuz;
 unsigned long interval = (300000); //Interval to send sensor data
+//unsigned long interval = (3000); //Interval to send sensor data
 
 EthernetClient ethClient;
 PubSubClient client(ethClient);
@@ -215,6 +235,23 @@ void sensorDataout(int idx, float data){
       client.subscribe("domoticz/arduino");
 }
 
+void sensorDataoutN(int idx, float data){
+      Serial.println("Sending data....");
+      String string = " { \"idx\" : ";
+      string.concat(idx);
+      string.concat(", \"nvalue\" : ");
+      string.concat(data);
+      string.concat(", \"svalue\" : \"0");
+      string.concat("\" \}");
+      Serial.println(string);
+      char output[80];
+      string.toCharArray(output, 80);
+      //char data2[] ={"\{\"command\": \"switchlight\", \"idx\": 14, \"switchcmd\": \"Off\", \"level\": 100\}"};
+      client.publish("domoticz/in",output);
+      // ... and resubscribe
+      client.subscribe("domoticz/arduino");
+}
+
 void sensorDataoutbaro(int idx, float data, int data2){
       Serial.println("Sending data....");
       String string = " { \"idx\" : ";
@@ -283,6 +320,9 @@ void setup()
   lcd.print("Rein Oud");
   lcd.setCursor(0,3);
   lcd.print("Domoticz systeem");
+  // DS18B20 sensors setup
+  sensors.begin();
+  dht.begin();
   if (!bmp.begin()) {
   Serial.println("Could not find a valid BMP085 sensor, check wiring!");
   while (1) {}
@@ -338,14 +378,26 @@ void loop()
     lcd.setCursor(0,1);
     lcd.print(data2);
     lcd.print(" mBar        ");
-    lcd.setCursor(0,2);
-    lcd.print(data1);
-    lcd.print("   degC      ");
     sensorDataoutbaro(idx1, data1, data2);
-    //sensorDataout(idx2, data2);
+    
     //sensorDataout(idx3, data3);
     //sensorDataout(idx4, data4);
+
+     sensors.request(sensorAddress);
+  
+    // Waiting (block the program) for measurement reesults
+    while(!sensors.available());
+  
+    // Reads the temperature from sensor
+    data3 = sensors.readTemperature(sensorAddress);
+    sensorDataout(idx2, data3);
+    lcd.setCursor(0,2);
+    lcd.print(data3);
+    lcd.print("   degC      ");    
     last = millis(); 
+
+    data4 = dht.readHumidity();
+    sensorDataoutN(idx3, data4);
   }
 
 if ((millis() - buttonLast) >= 2000){
