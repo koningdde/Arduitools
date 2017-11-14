@@ -1,0 +1,230 @@
+#include <Arduino.h>
+
+int HC595_clockPin=0;   // SH_CP of 74HC595 
+int HC595_latchPin=1;   // ST_CP of 74HC595 
+int HC595_dataPin=3;    // DS of 74HC595 
+int HC595_enablePin=2;  // Not OE of 74HC595
+int LED_Pin16= 4;
+int LED_Pin17= 5;
+int LED_Pin18= 6;
+int LED_Pin19= 7;
+int LED_Plane[] = {LED_Pin16, LED_Pin17, LED_Pin18, LED_Pin19};
+
+// Each line (8 bytes) is an entire cube, with two consecutive bytes per plane of LEDS,
+// and 16 LEDS per plane. LEDs are encoded in the following order:
+//    Lowest plane byte 1, lowest plane byte 2, second lowerst plane 1, then 2,
+//    second from top plane 1, then 2, highest plane 1, highest plane 2.
+//
+//    Each plane is encoded looking at the Arduino oriented with the USB/power
+//    designated by 'south' by started 'north west' as follows:
+//        D0    D1    D2    D3
+//        D4    D5    D6    D7
+//        D8    D9    D10   D11
+//        D12   D13   D14   D15
+//
+//        D16   D17   D18   D19
+//          (USB)      (Power)
+//    With D16 being the lowest plane, through to D19 being the highest plane
+//    Of course, if you wire the planes up differently, that is up to you!
+//
+//    Each two bytes of the pattern are therefore:
+//        B00000000, B00000000 -> D0-7, D8-15
+//    with D0 = msb of the first value, D7 being the lsb of the first value,
+//    and  D8 = msb of the second value, D15 being the lsb of the second value.
+//
+//    So the entire pattern is:
+//    B10010000,B00001001,B00000000,B00000000,B00000000,B00000000,B10010000,B00001001,
+//     |      |  |     ||                                          |      |  |     ||
+//     |      |  |     |\ D15 bottom plane                         |      |  |     |\ D15 top plane
+//     |      |  |     \ D14 bottom plane                          |      |  |     \ D14 top plane
+//     |      |  \ D8 bottom plane                                 |      |  \ D8 top plane
+//     |      \ D7 bottom plane                                    |      \ D7 top plane
+//     \ D0 bottom plane                                           \ D0 top plane
+//
+// Comment following in or out to switch patterns in or out
+#define SWAP   1
+#define SNAKE  1
+#define BURST  1
+#define SPIRAL 1
+#define ALT    1
+unsigned char pattern[] = {
+#ifdef SWAP
+  B10010000,B00001001,B00000000,B00000000,B00000000,B00000000,B10010000,B00001001,
+  B00000000,B00000000,B10010000,B00001001,B10010000,B00001001,B00000000,B00000000,
+  B00000000,B00000000,B01100000,B00000110,B01100000,B00000110,B00000000,B00000000,
+  B01100000,B00000110,B00000000,B00000000,B00000000,B00000000,B01100000,B00000110,
+  B00001001,B10010000,B00000000,B00000000,B00000000,B00000000,B00001001,B10010000,
+  B00000000,B00000000,B00001001,B10010000,B00001001,B10010000,B00000000,B00000000,
+  B00000000,B00000000,B00000110,B01100000,B00000110,B01100000,B00000000,B00000000,
+  B00000110,B01100000,B00000000,B00000000,B00000000,B00000000,B00000110,B01100000,
+#endif
+#ifdef SNAKE
+  B11001100,B00000000,B11001100,B00000000,B00000000,B00000000,B00000000,B00000000,
+  B00000000,B00000000,B11001100,B00000000,B11001100,B00000000,B00000000,B00000000,
+  B00000000,B00000000,B00000000,B00000000,B11001100,B00000000,B11001100,B00000000,
+  B00000000,B00000000,B00000000,B00000000,B00001100,B11000000,B00001100,B11000000,
+  B00000000,B00000000,B00000000,B00000000,B00000000,B11001100,B00000000,B11001100,
+  B00000000,B00000000,B00000000,B00000000,B00000000,B01100110,B00000000,B01100110,
+  B00000000,B00000000,B00000000,B00000000,B00000000,B00110011,B00000000,B00110011,
+  B00000000,B00000000,B00000000,B00110011,B00000000,B00110011,B00000000,B00000000,
+  B00000000,B00110011,B00000000,B00110011,B00000000,B00000000,B00000000,B00000000,
+  B00000011,B00110000,B00000011,B00110000,B00000000,B00000000,B00000000,B00000000,
+  B00110011,B00000000,B00110011,B00000000,B00000000,B00000000,B00000000,B00000000,
+  B01100110,B00000000,B01100110,B00000000,B00000000,B00000000,B00000000,B00000000,
+#endif
+#ifdef BURST
+  B00000000,B00000000,B00000110,B01100000,B00000110,B01100000,B00000000,B00000000,
+  B00000110,B01100000,B01101001,B10010110,B01101001,B10010110,B00000110,B01100000,
+  B01101001,B10010110,B10010000,B00001001,B10010000,B00001001,B01101001,B10010110,
+  B10010000,B00001001,B00000000,B00000000,B00000000,B00000000,B10010000,B00001001,
+  B00000000,B00000000,B00000000,B00000000,B00000000,B00000000,B00000000,B00000000,
+#endif
+#ifdef SPIRAL
+  B11001100,B00000000,B00000000,B00000000,B00000000,B00000000,B00000000,B00000000,
+  B01100110,B00000000,B00000000,B00000000,B00000000,B00000000,B00000000,B00000000,
+  B00110011,B00000000,B00000000,B00000000,B00000000,B00000000,B00000000,B00000000,
+  B00000011,B00110000,B00000000,B00000000,B00000000,B00000000,B00000000,B00000000,
+  B00000000,B00110011,B00000000,B00000000,B00000000,B00000000,B00000000,B00000000,
+  B00000000,B01100110,B00000000,B00000000,B00000000,B00000000,B00000000,B00000000,
+  B00000000,B11001100,B00000000,B00000000,B00000000,B00000000,B00000000,B00000000,
+  B00001100,B11000000,B00000000,B00000000,B00000000,B00000000,B00000000,B00000000,
+  B11001100,B00000000,B00000000,B00000000,B00000000,B00000000,B00000000,B00000000,
+  B00000000,B00000000,B11001100,B00000000,B00000000,B00000000,B00000000,B00000000,
+  B00000000,B00000000,B01100110,B00000000,B00000000,B00000000,B00000000,B00000000,
+  B00000000,B00000000,B00110011,B00000000,B00000000,B00000000,B00000000,B00000000,
+  B00000000,B00000000,B00000011,B00110000,B00000000,B00000000,B00000000,B00000000,
+  B00000000,B00000000,B00000000,B00110011,B00000000,B00000000,B00000000,B00000000,
+  B00000000,B00000000,B00000000,B01100110,B00000000,B00000000,B00000000,B00000000,
+  B00000000,B00000000,B00000000,B11001100,B00000000,B00000000,B00000000,B00000000,
+  B00000000,B00000000,B00001100,B11000000,B00000000,B00000000,B00000000,B00000000,
+  B00000000,B00000000,B11001100,B00000000,B00000000,B00000000,B00000000,B00000000,
+  B00000000,B00000000,B00000000,B00000000,B11001100,B00000000,B00000000,B00000000,
+  B00000000,B00000000,B00000000,B00000000,B01100110,B00000000,B00000000,B00000000,
+  B00000000,B00000000,B00000000,B00000000,B00110011,B00000000,B00000000,B00000000,
+  B00000000,B00000000,B00000000,B00000000,B00000011,B00110000,B00000000,B00000000,
+  B00000000,B00000000,B00000000,B00000000,B00000000,B00110011,B00000000,B00000000,
+  B00000000,B00000000,B00000000,B00000000,B00000000,B01100110,B00000000,B00000000,
+  B00000000,B00000000,B00000000,B00000000,B00000000,B11001100,B00000000,B00000000,
+  B00000000,B00000000,B00000000,B00000000,B00001100,B11000000,B00000000,B00000000,
+  B00000000,B00000000,B00000000,B00000000,B11001100,B00000000,B00000000,B00000000,
+  B00000000,B00000000,B00000000,B00000000,B00000000,B00000000,B11001100,B00000000,
+  B00000000,B00000000,B00000000,B00000000,B00000000,B00000000,B01100110,B00000000,
+  B00000000,B00000000,B00000000,B00000000,B00000000,B00000000,B00110011,B00000000,
+  B00000000,B00000000,B00000000,B00000000,B00000000,B00000000,B00000011,B00110000,
+  B00000000,B00000000,B00000000,B00000000,B00000000,B00000000,B00000000,B00110011,
+  B00000000,B00000000,B00000000,B00000000,B00000000,B00000000,B00000000,B01100110,
+  B00000000,B00000000,B00000000,B00000000,B00000000,B00000000,B00000000,B11001100,
+  B00000000,B00000000,B00000000,B00000000,B00000000,B00000000,B00001100,B11000000,
+  B00000000,B00000000,B00000000,B00000000,B00000000,B00000000,B11001100,B00000000,
+#endif
+#ifdef ALT
+  B11111001,B10011111,B10010000,B00001001,B10010000,B00001001,B11111001,B10011111,
+  B00000110,B01100000,B01101001,B10010110,B01101001,B10010110,B00000110,B01100000,
+  B00000000,B00000000,B00000110,B01100000,B00000110,B01100000,B00000000,B00000000,
+  B00000110,B01100000,B01101001,B10010110,B01101001,B10010110,B00000110,B01100000,
+#endif
+};
+int patternNumber=0;
+int numPatterns=sizeof(pattern)/8;
+int tickCount=0;
+int tickCountMax=50;      // How many times to loop before changing the pattern
+unsigned int currentPattern[4];
+
+void setup() {
+  // put your setup code here, to run once:
+  pinMode( HC595_latchPin,  OUTPUT );
+  pinMode( HC595_clockPin,  OUTPUT );
+  pinMode( HC595_dataPin,   OUTPUT );
+  pinMode( HC595_enablePin, OUTPUT );
+  
+  pinMode( LED_Pin16, OUTPUT );
+  pinMode( LED_Pin17, OUTPUT );
+  pinMode( LED_Pin18, OUTPUT );
+  pinMode( LED_Pin19, OUTPUT );
+  
+  digitalWrite(LED_Pin16,HIGH);
+  digitalWrite(LED_Pin17,HIGH);
+  digitalWrite(LED_Pin18,HIGH);
+  digitalWrite(LED_Pin19,HIGH);
+//  digitalWrite(HC595_enablePin, LOW);  // Enable Not OE (negative logic)
+
+  patternNumber=0;
+  tickCount = tickCountMax;
+}
+
+/*
+  Protocol for sending the data to the hc595 is as follows:
+   (see: http://www.arduino.cc/en/Tutorial/ShiftOut)
+   
+   "when the clock pin goes from low to high, the shift register
+    reads the state of the data pin ... when the latch pin goes
+    from low to high the sent data gets moved from the shift
+    registers ... to the output pins"
+   
+   As we have two HC595s chained together, we use a 16 bit input value
+*/
+void write_74HC595 (unsigned int hc595value) { 
+   digitalWrite(HC595_latchPin, LOW);   // ensures LEDs don't light whilst changing values
+//   digitalWrite(HC595_enablePin, HIGH); // OE is negative logic
+   
+   // Shift each 8 bit value in sequence - the two chained HC595s automatically grab
+   // the right bits - the first 8 to the first chip, second 8 to the second chip
+   shiftOut(HC595_dataPin, HC595_clockPin, LSBFIRST, hc595value);  
+   shiftOut(HC595_dataPin, HC595_clockPin, LSBFIRST, (hc595value >> 8));
+   
+   digitalWrite(HC595_latchPin, HIGH);  // data transferred from shift register to outputs when latch goes LOW->HIGH
+//   digitalWrite(HC595_enablePin, LOW);  // re-enable (negative logic again)
+}
+
+/*
+  Inputs: Array of 4 integers - one for each plane
+*/
+void display (unsigned int *pPattern)
+{
+  int i;
+  for (i=0; i<4; i++)
+  {
+    int j;
+    for (j=0; j<1000; j++)
+    {
+      // Slow this down so that there is time for the LEDS to light
+      // Experimentation shows that 200+ gives brighter LEDs
+      // NB: Do it this way so an empty loop isn't optimised out
+      if (j==0)
+      {
+        digitalWrite(LED_Plane[0], HIGH);
+        digitalWrite(LED_Plane[1], HIGH);
+        digitalWrite(LED_Plane[2], HIGH);
+        digitalWrite(LED_Plane[3], HIGH);
+        write_74HC595 (pPattern[i]);
+        digitalWrite(LED_Plane[i], LOW);
+      }
+    }
+  }
+}
+
+void displayPattern ()
+{
+  int i;
+  // only update it every tick otherwise just display as is
+  tickCount--;
+  if (tickCount <= 0)
+  {
+    tickCount = tickCountMax;
+    for (i=0; i<4; i++)
+    {
+      currentPattern[i] = pattern[i*2 + patternNumber*8] * 256 + pattern[i*2 + 1 + patternNumber*8];
+    }
+    patternNumber++;
+    if (patternNumber >= numPatterns)
+    {
+      patternNumber = 0;
+    }
+  }
+  display(&currentPattern[0]);
+}
+
+void loop() {
+  // put your main code here, to run repeatedly:
+  displayPattern();
+}
