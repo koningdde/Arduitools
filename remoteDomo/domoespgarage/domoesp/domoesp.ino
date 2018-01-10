@@ -25,6 +25,8 @@
 
 #include <ESP8266WiFi.h>
 #include <PubSubClient.h>
+#include <OneWire.h> 
+OneWire ds(14); //Dallas op pin
 
 const char* ssid = "Jupiter";
 const char* password = "3827310955370393";
@@ -32,27 +34,55 @@ const char* mqtt_server = "192.168.100.54";
 
 #define clientId "ESPGarage"
 char unitId = '7'; //Unit id
-int idx1 = 999; //IDX number for domoticz
+int idx1 = 258; //IDX number for domoticz
 float data1 = 0.0; //Datapoint
 float data2 = 0;
 
-int relay1 = 16; //Hardwire output
-int relay2 = 4; //Hardwire output
+int rood = 13; //Hardwire output
+int groen = 15; //Hardwire output
 
-int inputPin = 2;
+int garageDeur = 16;
+int deelIn = 2;
+int volIn = 4;
+int meterkast = 5;
+int entreedeur = 12;
+int garage = 10;
+
 int val = 0;
+int val2 = 0;
+int val3 = 0;
+int val4 = 0;
+int val5 = 0;
+int val6 = 0;
 bool state;
+bool state2;
+bool state3;
+bool state4;
+bool state5;
+bool state6;
+bool alarmOnVol;
+bool alarmOnDeel;
 
 unsigned long last;
 unsigned long interval = 300000; //Interval to send sensor data
+//unsigned long interval = 3000; //Interval to send sensor data
+const long blinkInterval = 500;
+long blinkLast = 0;
+bool blinker;
+bool ledState;
 
 WiFiClient espClient;
 PubSubClient client(espClient);
 
 void setup() {
-  pinMode(relay1, OUTPUT);
-  pinMode(relay2, OUTPUT);
-  pinMode(inputPin, INPUT_PULLUP);     // declare sensor as input
+  pinMode(rood, OUTPUT);
+  pinMode(groen, OUTPUT);
+  pinMode(garageDeur, INPUT_PULLUP);     // declare sensor as input
+  pinMode(deelIn, INPUT_PULLUP);     // declare sensor as input
+  pinMode(volIn, INPUT_PULLUP);     // declare sensor as input
+  pinMode(meterkast, INPUT_PULLUP);     // declare sensor as input
+  pinMode(entreedeur, INPUT_PULLUP);     // declare sensor as input
+  pinMode(garage, INPUT_PULLUP);     // declare sensor as input
   Serial.begin(115200);
   setup_wifi();
   client.setServer(mqtt_server, 1883);
@@ -69,14 +99,19 @@ void loop() {
   client.loop();
 
    if ((millis() - last) >= interval){ //To start sending sensordata
-    data1 = 0.0;
+    data1 = dallas();
     data2 = 0.0;
-    //sensorDataout(idx1, data1, data2);
+    sensorDataout(idx1, data1, data2);
     last = millis();   
   }
 
   //Read connected sensors
-val = digitalRead(inputPin);  // read input value
+val = digitalRead(garageDeur);  // read input value
+val2 = digitalRead(deelIn);  // read input value
+val3 = digitalRead(volIn);  // read input value
+val4 = digitalRead(meterkast);  // read input value
+val5 = digitalRead(entreedeur);  // read input value
+val6 = digitalRead(garage);  // read input value
 
 if (val == HIGH && state == LOW)
       {
@@ -91,9 +126,107 @@ if (val == LOW && state == HIGH)
         Serial.println("Garegadeur open");
         state = LOW;
     }
- 
-    
+
+if (val2 == HIGH && state2 == LOW)
+      {
+      lightOut(278,"Off"); //idx 26, uit, sturen naar domoticz
+      Serial.println("Deel uit");
+      state2 = HIGH;
+      }
+
+if (val2 == LOW && state2 == HIGH && alarmOnVol == false && alarmOnDeel == false)
+    {   
+        lightOut(278,"On"); //idx 26, uit, sturen naar domoticz
+        Serial.println("Deel in");
+        state2 = LOW;
+     }
+
+if (val3 == HIGH && state3 == LOW)
+      {
+      lightOut(277,"Off"); //idx 26, uit, sturen naar domoticz
+      Serial.println("Vol uit");
+      state3 = HIGH;
+      }
+
+if (val3 == LOW && state3 == HIGH)
+    {   
+        lightOut(277,"On"); //idx 26, uit, sturen naar domoticz
+        Serial.println("Vol in");
+        state3 = LOW;
+        blinker = true;
+    }
+
+if (val4 == HIGH && state4 == LOW)
+      {
+      lightOut(280,"On"); //idx 26, uit, sturen naar domoticz
+      Serial.println("Meterkast open");
+      state4 = HIGH;
+      }
+
+if (val4 == LOW && state4 == HIGH)
+    {   
+        lightOut(280,"Off"); //idx 26, uit, sturen naar domoticz
+        Serial.println("Meterkast dicht");
+        state4 = LOW;
+    }
+
+if (val5 == HIGH && state5 == LOW)
+      {
+      lightOut(336,"On"); //idx 26, uit, sturen naar domoticz
+      Serial.println("Entreedeur open");
+      state5 = HIGH;
+      }
+
+if (val5 == LOW && state5 == HIGH)
+    {   
+        lightOut(336,"Off"); //idx 26, uit, sturen naar domoticz
+        Serial.println("Entreedeur dicht");
+        state5 = LOW;
+    }
+
+if (val6 == HIGH && state6 == LOW)
+      {
+      lightOut(337,"On"); //idx 26, uit, sturen naar domoticz
+      Serial.println("Garage beweging aan");
+      state6 = HIGH;
+      }
+      
+if (val6 == LOW && state6 == HIGH)
+    {   
+        lightOut(337,"Off"); //idx 26, uit, sturen naar domoticz
+        Serial.println("Garage beweging uit");
+        state6 = LOW;
+    }
+
+if ((blinker == true) && (millis() - blinkLast >= blinkInterval))
+    {
+    blinkLast = millis();
+
+    if (ledState == LOW) {
+      ledState = HIGH;
+    } else {
+      ledState = LOW;
+    }
+    digitalWrite(rood, ledState);
+    }
+     
 }//end main loop
+
+int dallas(){
+  byte data[2];
+  ds.reset(); 
+  ds.write(0xCC);
+  ds.write(0x44);
+  delay(750);
+  ds.reset();
+  ds.write(0xCC);
+  ds.write(0xBE);
+  data[0] = ds.read(); 
+  data[1] = ds.read();
+  int Temp = (data[1]<<8)+data[0];
+  Temp = Temp>>4;
+  return Temp;
+ }
 
 void sensorDataout(int idx, float data, int data2){
       Serial.println("Sending data....");
@@ -119,20 +252,30 @@ void relayOut(char relay, char state){
     case '0':  
       switch (state){
         case '0':
-
+        Serial.println("rood uit");
+        digitalWrite(rood, LOW);
+        alarmOnVol = false;
+        blinker = false;
         break;
         case '9':
-
+        Serial.println("rood aan");
+        digitalWrite(rood, HIGH);
+        alarmOnVol = true;
+        blinker = false;
         break;
       }
     break;   
     case '1':  
       switch (state){
         case '0':
-
+        Serial.println("groen uit");
+        digitalWrite(groen, LOW);
+        alarmOnDeel = false;
         break;
         case '9':
-
+        Serial.println("groen aan");
+        digitalWrite(groen, HIGH);
+        alarmOnDeel = true;
         break;
       }
     break;
@@ -147,24 +290,16 @@ void relayOut(char relay, char state){
     case '3':  
       switch (state){
         case '0':
-        Serial.println("relais 1 uit");
-        digitalWrite(relay1, LOW);
         break;
         case '9':
-        Serial.println("relais 1 aan");
-        digitalWrite(relay1, HIGH);
         break;
       }
     break;
     case '4':  
       switch (state){
         case '0':
-        Serial.println("relais 2 uit");
-        digitalWrite(relay2, LOW);
         break;
         case '9':
-        Serial.println("relais 2 aan");
-        digitalWrite(relay2, HIGH);
         break;
       }
     break;      

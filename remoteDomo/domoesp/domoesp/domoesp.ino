@@ -30,22 +30,16 @@ const char* ssid = "Jupiter";
 const char* password = "3827310955370393";
 const char* mqtt_server = "192.168.100.54";
 
-#define clientId "ESPWoon"
+#define clientId "ESPWoon2"
 char unitId = '6'; //Unit id
 int idx1 = 999; //IDX number for domoticz
 float data1 = 0.0; //Datapoint
 float data2 = 0;
 
 int relay1 = 16; //Hardwire output
-int relay2 = 4; //Hardwire output
+int relay2 = 14; //Hardwire output
 
-//bool pirstate = LOW;
-bool pirmem = LOW;
-int inputPin = 13;
 int val = 0; 
-int BLAUW = 5;
-int GEEL = 14;
-int ROOD = 12;
 
 unsigned long last;
 unsigned long interval = 300000; //Interval to send sensor data
@@ -57,22 +51,14 @@ WiFiClient espClient;
 PubSubClient client(espClient);
 
 void setup() {
-  pinMode(BLAUW, OUTPUT); 
-  pinMode(GEEL, OUTPUT); 
-  pinMode(ROOD, OUTPUT);
   pinMode(relay1, OUTPUT);
   pinMode(relay2, OUTPUT);
-  digitalWrite(BLAUW,HIGH);
-  digitalWrite(GEEL,HIGH);
-  digitalWrite(ROOD,HIGH);   
-  pinMode(inputPin, INPUT_PULLUP);     // declare sensor as input
+  digitalWrite(relay1,LOW);
+  digitalWrite(relay2,LOW);
   Serial.begin(115200);
   setup_wifi();
   client.setServer(mqtt_server, 1883);
   client.setCallback(callback); 
-  digitalWrite(BLAUW,LOW);
-  digitalWrite(GEEL,LOW);
-  digitalWrite(ROOD,LOW);   
 }
 
 void loop() {
@@ -91,33 +77,7 @@ void loop() {
   }
 
   //Read connected sensors
-val = digitalRead(inputPin);  // read input value
 
-if (val == HIGH && pirmem == LOW)
-      {
-      lightOut(116,"On"); //idx 26, uit, sturen naar domoticz
-      Serial.println("Motion detected!");
-      digitalWrite(BLAUW,HIGH);
-      pirmem = HIGH;
-      }
-
-if (((millis() - lastmotion) >= intervalmotion) && (val == LOW))
-    {   
-        lightOut(116,"Off"); //idx 26, uit, sturen naar domoticz
-        Serial.println("Motion ended!");
-         digitalWrite(BLAUW,LOW);
-         pirmem= LOW;
-         lastmotion = millis();
-    }
-
-if (((millis() - lastmotion) >= intervalmotion) && (val == HIGH))
-       {
-            lightOut(116,"On"); //idx 26, uit, sturen naar domoticz
-            Serial.println("Motion detected!");
-            digitalWrite(BLAUW,HIGH);
-            lastmotion = millis();
-      }
-  
     
 }//end main loop
 
@@ -145,30 +105,30 @@ void relayOut(char relay, char state){
     case '0':  
       switch (state){
         case '0':
-        digitalWrite(ROOD, LOW);
+        //digitalWrite(rood, LOW);
         break;
         case '9':
-        digitalWrite(ROOD, HIGH);
+        //digitalWrite(rood, HIGH);
         break;
       }
     break;   
     case '1':  
       switch (state){
         case '0':
-        digitalWrite(GEEL, LOW);
+        //digitalWrite(geel, LOW);
         break;
         case '9':
-        digitalWrite(GEEL, HIGH);
+        //digitalWrite(geel, HIGH);
         break;
       }
     break;
     case '2':  
       switch (state){
         case '0':
-        digitalWrite(BLAUW, LOW);
+        //digitalWrite(BLAUW, LOW);
         break;
         case '9':
-        digitalWrite(BLAUW, HIGH);
+        //digitalWrite(BLAUW, HIGH);
         break;
       }
     break;
