@@ -47,8 +47,8 @@ int volIn = 4;
 int meterkast = 5;
 int entreedeur = 12;
 int garage = 10;
-
 int val = 0;
+int valdelay = 0;
 int val2 = 0;
 int val3 = 0;
 int val4 = 0;
@@ -113,6 +113,20 @@ val4 = digitalRead(meterkast);  // read input value
 val5 = digitalRead(entreedeur);  // read input value
 val6 = digitalRead(garage);  // read input value
 
+
+// Delay for garagedeur
+if (val == LOW)
+  {
+  valdelay = valdelay + 1;
+  }
+
+if (val == HIGH)
+  {
+  valdelay = 0;
+  }
+// end delay garagedeur
+
+
 if (val == HIGH && state == LOW)
       {
       lightOut(218,"Off"); //idx 26, uit, sturen naar domoticz
@@ -120,7 +134,7 @@ if (val == HIGH && state == LOW)
       state = HIGH;
       }
 
-if (val == LOW && state == HIGH)
+if (valdelay > 20 && state == HIGH)
     {   
         lightOut(218,"On"); //idx 26, uit, sturen naar domoticz
         Serial.println("Garegadeur open");
