@@ -1,0 +1,9 @@
+#######################################
+# Syntax Coloring Map For ICStation_Light_cube
+####################################### 
+# Class
+#######################################
+
+ICStation_Light_cube	KEYWORD1
+
+
