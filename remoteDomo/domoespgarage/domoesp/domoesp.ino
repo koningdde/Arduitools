@@ -54,11 +54,12 @@ int val3 = 0;
 int val4 = 0;
 int val5 = 0;
 int val6 = 0;
+int valdelay6 = 0;
 bool state;
 bool state2;
 bool state3;
-bool state4;
-bool state5;
+bool state4 = HIGH;
+bool state5 = HIGH;
 bool state6;
 bool alarmOnVol;
 bool alarmOnDeel;
@@ -120,12 +121,32 @@ if (val == LOW)
   valdelay = valdelay + 1;
   }
 
+if (valdelay > 200)
+  {
+  valdelay = 21; 
+  }
+
 if (val == HIGH)
   {
   valdelay = 0;
   }
 // end delay garagedeur
+// Delay for beweging garage
+if (val6 == HIGH)
+  {
+  valdelay6 = valdelay6 + 1;
+  }
 
+if (valdelay6 > 200)
+  {
+  valdelay6 = 21; 
+  }
+
+if (val6 == LOW)
+  {
+  valdelay6 = 0;
+  }
+// end delay garagedeur
 
 if (val == HIGH && state == LOW)
       {
@@ -198,7 +219,7 @@ if (val5 == LOW && state5 == HIGH)
         state5 = LOW;
     }
 
-if (val6 == HIGH && state6 == LOW)
+if (valdelay6 > 20 && state6 == LOW)
       {
       lightOut(337,"On"); //idx 26, uit, sturen naar domoticz
       Serial.println("Garage beweging aan");
