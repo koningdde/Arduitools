@@ -2,7 +2,7 @@
 #include <Wire.h>
 #include <Adafruit_BMP085.h>
 #include <SPI.h>
-#include <UIPEthernet.h>
+#include <Ethernet.h>
 #include <PubSubClient.h>
 #include <LiquidCrystal_I2C.h>
 LiquidCrystal_I2C lcd(0x27, 2, 1, 0, 4, 5, 6, 7, 3, POSITIVE);  // Set the LCD I2C address
@@ -44,7 +44,6 @@ float data1 = 0.0; //Datapoint
 float data2 = 0.0;
 float data3 = 0.0;
 float data4 = 0.0;
-
 
 //Holders
 int coReset;
@@ -293,6 +292,8 @@ void reconnect() {
   // Loop until we're reconnected
   while (!client.connected()) {
     Serial.print("Attempting MQTT connection...");
+    lcd.setCursor(0,0);
+    lcd.print("Not connected       ");
     // Attempt to connect
     if (client.connect(clientId)) {
       Serial.println("connected");
@@ -306,7 +307,7 @@ void reconnect() {
       // Wait 5 seconds before retrying
       delay(5000);
     }
-  }
+   }
 }
 
 void setup()
@@ -360,8 +361,6 @@ void setup()
 void loop()
 {
   if (!client.connected()) {//Reconnect not connected
-    lcd.setCursor(0,0);
-    lcd.print("Not connected       ");
     reconnect();
     forceData();
   }
