@@ -70,6 +70,7 @@ unsigned long interval = 300000; //Interval to send sensor data
 const long blinkInterval = 500;
 long blinkLast = 0;
 bool blinker;
+bool blinkerGroen;
 bool ledState;
 
 WiFiClient espClient;
@@ -173,6 +174,7 @@ if (val2 == LOW && state2 == HIGH && alarmOnVol == false && alarmOnDeel == false
     {   
         lightOut(278,"On"); //idx 26, uit, sturen naar domoticz
         Serial.println("Deel in");
+        blinkerGroen = true;
         state2 = LOW;
      }
 
@@ -244,7 +246,19 @@ if ((blinker == true) && (millis() - blinkLast >= blinkInterval))
     }
     digitalWrite(rood, ledState);
     }
-     
+
+if ((blinkerGroen == true) && (millis() - blinkLast >= blinkInterval))
+    {
+    blinkLast = millis();
+
+    if (ledState == LOW) {
+      ledState = HIGH;
+    } else {
+      ledState = LOW;
+    }
+    digitalWrite(groen, ledState);
+    }
+    
 }//end main loop
 
 int dallas(){
@@ -287,58 +301,52 @@ void relayOut(char relay, char state){
     case '0':  
       switch (state){
         case '0':
-        Serial.println("rood uit");
-        digitalWrite(rood, LOW);
-        alarmOnVol = false;
-        blinker = false;
         break;
         case '9':
-        Serial.println("rood aan");
-        digitalWrite(rood, HIGH);
-        alarmOnVol = true;
-        blinker = false;
         break;
       }
     break;   
     case '1':  
       switch (state){
         case '0':
-        Serial.println("groen uit");
-        digitalWrite(groen, LOW);
-        alarmOnDeel = false;
         break;
         case '9':
-        Serial.println("groen aan");
+        break;
+      }
+    break;
+  }
+}
+
+void alarmState(char relay, char state){  
+  Serial.println("relais");
+  switch (relay) {
+    case '1':  
+      switch (state){
+        case '0':
+        Serial.println("alarm uit herhaal");
+        digitalWrite(rood, LOW);
+        digitalWrite(groen, LOW);
+        alarmOnVol = false;
+        alarmOnDeel = false;
+        blinker = false;
+        blinkerGroen = false;
+        break;
+        case '1':
+        Serial.println("alarm deel in herhaal");
         digitalWrite(groen, HIGH);
         alarmOnDeel = true;
+        blinker = false;
+        blinkerGroen = false;
+        break;
+        case '2':
+        Serial.println("alarm vol in herhaal");
+        digitalWrite(rood, HIGH);
+        alarmOnDeel = true;
+        blinker = false;
+        blinkerGroen = false;
         break;
       }
-    break;
-    case '2':  
-      switch (state){
-        case '0':
-        break;
-        case '9':
-        break;
-      }
-    break;
-    case '3':  
-      switch (state){
-        case '0':
-        break;
-        case '9':
-        break;
-      }
-    break;
-    case '4':  
-      switch (state){
-        case '0':
-        break;
-        case '9':
-        break;
-      }
-    break;      
-  }
+}
 }
 
 void lightOut(int idx, char cmd[]){  
@@ -392,6 +400,9 @@ void callback(char* topic, byte* payload, unsigned int length) {
     switch ((char)payload[1]){
       case 'r':
        relayOut( (char)payload[2],(char)payload[3] );
+       break;
+      case 'a':
+       alarmState( (char)payload[2],(char)payload[3] );
        break;
     }//end switch case
     }//enf first iff
