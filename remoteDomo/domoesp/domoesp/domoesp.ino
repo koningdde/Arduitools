@@ -22,6 +22,25 @@
   - Select your ESP8266 in "Tools -> Board"
 
 */
+#include <FS.h> //  Settings saved to SPIFFS
+#include <ESP8266WiFi.h>
+#include <ESP8266HTTPClient.h>
+#include <ESP8266httpUpdate.h>
+#include <ESPAsyncTCP.h>
+#include <ESPAsyncWebServer.h>
+#include <AsyncJson.h>
+
+#include <ArduinoOTA.h>
+#include <ArduinoJson.h> // required for settings file to make it readable
+
+#include <Hash.h>
+#include <ESP8266mDNS.h>
+
+#include <ESPmanager.h>
+
+AsyncWebServer HTTP(80);
+
+ESPmanager settings(HTTP, SPIFFS);
 
 #include <ESP8266WiFi.h>
 #include <PubSubClient.h>
@@ -51,6 +70,31 @@ WiFiClient espClient;
 PubSubClient client(espClient);
 
 void setup() {
+  SPIFFS.begin();
+  
+  Serial.println("");
+  Serial.println(F("Example ESPconfig - using ESPAsyncWebServer"));
+
+  Serial.printf("Sketch size: %u\n", ESP.getSketchSize());
+  Serial.printf("Free size: %u\n", ESP.getFreeSketchSpace());
+
+  settings.begin();
+
+    HTTP.rewrite("/", "/espman/setup.htm").setFilter( [](AsyncWebServerRequest * request) {
+    return settings.portal();
+  });
+
+  
+  //  then use this rewrite and serve static to serve your index file(s)
+  HTTP.rewrite("/", "/index.htm");
+  HTTP.serveStatic("/index.htm", SPIFFS, "/index.htm");
+
+    HTTP.begin();
+
+  Serial.print(F("Free Heap: "));
+  Serial.println(ESP.getFreeHeap());
+
+  
   pinMode(relay1, OUTPUT);
   pinMode(relay2, OUTPUT);
   digitalWrite(relay1,LOW);
@@ -62,6 +106,8 @@ void setup() {
 }
 
 void loop() {
+
+  settings.handle();
 
   if (!client.connected()) {
     reconnect();
