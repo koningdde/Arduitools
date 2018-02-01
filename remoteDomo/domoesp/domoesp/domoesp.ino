@@ -70,6 +70,7 @@ WiFiClient espClient;
 PubSubClient client(espClient);
 
 void setup() {
+  Serial.begin(115200);
   SPIFFS.begin();
   
   Serial.println("");
@@ -99,7 +100,7 @@ void setup() {
   pinMode(relay2, OUTPUT);
   digitalWrite(relay1,LOW);
   digitalWrite(relay2,LOW);
-  Serial.begin(115200);
+
   setup_wifi();
   client.setServer(mqtt_server, 1883);
   client.setCallback(callback); 
@@ -227,7 +228,7 @@ void setup_wifi() {
   Serial.println();
   Serial.print("Connecting to ");
   Serial.println(ssid);
-
+  
   WiFi.begin(ssid, password);
 
   while (WiFi.status() != WL_CONNECTED) {
