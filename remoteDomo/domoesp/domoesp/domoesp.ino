@@ -70,7 +70,9 @@ WiFiClient espClient;
 PubSubClient client(espClient);
 
 void setup() {
+  Serial.begin(115200);
   SPIFFS.begin();
+  Serial.println("STARTTING SYSTEM");
   
   Serial.println("");
   Serial.println(F("Example ESPconfig - using ESPAsyncWebServer"));
@@ -99,7 +101,7 @@ void setup() {
   pinMode(relay2, OUTPUT);
   digitalWrite(relay1,LOW);
   digitalWrite(relay2,LOW);
-  Serial.begin(115200);
+  
   setup_wifi();
   client.setServer(mqtt_server, 1883);
   client.setCallback(callback); 
