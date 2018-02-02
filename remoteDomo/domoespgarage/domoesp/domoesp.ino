@@ -1,27 +1,4 @@
-/*
- Basic ESP8266 MQTT example
-
- This sketch demonstrates the capabilities of the pubsub library in combination
- with the ESP8266 board/library.
-
- It connects to an MQTT server then:
-  - publishes "hello world" to the topic "outTopic" every two seconds
-  - subscribes to the topic "inTopic", printing out any messages
-    it receives. NB - it assumes the received payloads are strings not binary
-  - If the first character of the topic "inTopic" is an 1, switch ON the ESP Led,
-    else switch it off
-
- It will reconnect to the server if the connection is lost using a blocking
- reconnect function. See the 'mqtt_reconnect_nonblocking' example for how to
- achieve the same result without blocking the main loop.
-
- To install the ESP8266 board, (using Arduino 1.6.4+):
-  - Add the following 3rd party board manager under "File -> Preferences -> Additional Boards Manager URLs":
-       http://arduino.esp8266.com/stable/package_esp8266com_index.json
-  - Open the "Tools -> Board -> Board Manager" and click install for the ESP8266"
-  - Select your ESP8266 in "Tools -> Board"
-
-*/
+//ESP Garage
 
 #include <ESP8266WiFi.h>
 #include <PubSubClient.h>
@@ -56,21 +33,23 @@ int val5 = 0;
 int val6 = 0;
 int valdelay6 = 0;
 bool state;
-bool state2;
-bool state3;
 bool state4 = HIGH;
 bool state5 = HIGH;
 bool state6;
-bool alarmOnVol;
-bool alarmOnDeel;
+bool alarmOnVol = false;
+bool alarmOnDeel = false;
 
 unsigned long last;
 unsigned long interval = 300000; //Interval to send sensor data
-//unsigned long interval = 3000; //Interval to send sensor data
 const long blinkInterval = 500;
+const long blinkIntervalSnel = 250;
+unsigned long sendInterval = 3000;
+unsigned long sendLast;
 long blinkLast = 0;
-bool blinker;
+bool blinkerRood;
 bool blinkerGroen;
+bool blinkerRoodSnel;
+bool blinkerGroenSnel;
 bool ledState;
 
 WiFiClient espClient;
@@ -89,7 +68,6 @@ void setup() {
   setup_wifi();
   client.setServer(mqtt_server, 1883);
   client.setCallback(callback); 
- 
 }
 
 void loop() {
@@ -163,36 +141,43 @@ if (valdelay > 20 && state == HIGH)
         state = LOW;
     }
 
-if (val2 == HIGH && state2 == LOW)
-      {
-      lightOut(278,"Off"); //idx 26, uit, sturen naar domoticz
-      Serial.println("Deel uit");
-      state2 = HIGH;
-      }
-
-if (val2 == LOW && state2 == HIGH && alarmOnVol == false && alarmOnDeel == false)
+//Deel inschakelen
+if (val2 == LOW && alarmOnVol == false && alarmOnDeel == false && (millis() - sendLast >= sendInterval))//Alleen schakelen als alarm uit is
     {   
         lightOut(278,"On"); //idx 26, uit, sturen naar domoticz
         Serial.println("Deel in");
         blinkerGroen = true;
-        state2 = LOW;
+        sendLast = millis();
      }
 
-if (val3 == HIGH && state3 == LOW)
-      {
-      lightOut(277,"Off"); //idx 26, uit, sturen naar domoticz
-      Serial.println("Vol uit");
-      state3 = HIGH;
-      }
-
-if (val3 == LOW && state3 == HIGH)
+//Vol Inschakelen
+if (val3 == LOW && alarmOnVol == false && alarmOnDeel == false && (millis() - sendLast >= sendInterval))//Alleen schakelen als alarm uit is
     {   
         lightOut(277,"On"); //idx 26, uit, sturen naar domoticz
         Serial.println("Vol in");
-        state3 = LOW;
-        blinker = true;
+        blinkerRood = true;
+        sendLast = millis();
     }
 
+//Deel Uitschakelen
+if (val3 == LOW && alarmOnDeel == true && (millis() - sendLast >= sendInterval))//Alleen schakelen deel aan is
+    {   
+        lightOut(278,"On"); //idx 26, uit, sturen naar domoticz
+        Serial.println("Deel uit"); //Toggle, dus schakel uit
+        blinkerGroenSnel = true;
+        sendLast = millis();
+    }
+    
+//Vol Uitschakelen
+if (val3 == LOW && alarmOnVol == true && (millis() - sendLast >= sendInterval))//Alleen schakelen vol aan is
+    {   
+        lightOut(277,"On"); //idx 26, uit, sturen naar domoticz
+        Serial.println("Vol uit"); //Toggle, dus schakel uit
+        blinkerRoodSnel = true;
+        sendLast = millis();
+    }
+
+//Andere ingangen    
 if (val4 == HIGH && state4 == LOW)
       {
       lightOut(280,"On"); //idx 26, uit, sturen naar domoticz
@@ -235,7 +220,7 @@ if (val6 == LOW && state6 == HIGH)
         state6 = LOW;
     }
 
-if ((blinker == true) && (millis() - blinkLast >= blinkInterval))
+if ((blinkerRood == true) && (millis() - blinkLast >= blinkInterval))
     {
     blinkLast = millis();
 
@@ -258,6 +243,31 @@ if ((blinkerGroen == true) && (millis() - blinkLast >= blinkInterval))
     }
     digitalWrite(groen, ledState);
     }
+
+if ((blinkerRoodSnel == true) && (millis() - blinkLast >= blinkIntervalSnel))
+    {
+    blinkLast = millis();
+
+    if (ledState == LOW) {
+      ledState = HIGH;
+    } else {
+      ledState = LOW;
+    }
+    digitalWrite(rood, ledState);
+    }
+
+if ((blinkerGroenSnel == true) && (millis() - blinkLast >= blinkIntervalSnel))
+    {
+    blinkLast = millis();
+
+    if (ledState == LOW) {
+      ledState = HIGH;
+    } else {
+      ledState = LOW;
+    }
+    digitalWrite(groen, ledState);
+    }
+
     
 }//end main loop
 
@@ -328,22 +338,30 @@ void alarmState(char relay, char state){
         digitalWrite(groen, LOW);
         alarmOnVol = false;
         alarmOnDeel = false;
-        blinker = false;
+        blinkerRood = false;
         blinkerGroen = false;
+        blinkerRoodSnel = false;
+        blinkerGroenSnel = false;
         break;
         case '1':
         Serial.println("alarm deel in herhaal");
         digitalWrite(groen, HIGH);
         alarmOnDeel = true;
-        blinker = false;
+        alarmOnVol = false;
+        blinkerRood = false;
         blinkerGroen = false;
+        blinkerRoodSnel = false;
+        blinkerGroenSnel = false;
         break;
         case '2':
         Serial.println("alarm vol in herhaal");
         digitalWrite(rood, HIGH);
-        alarmOnDeel = true;
-        blinker = false;
+        alarmOnVol = true;
+        alarmOnDeel = false;
+        blinkerRood = false;
         blinkerGroen = false;
+        blinkerRoodSnel = false;
+        blinkerGroenSnel = false;
         break;
       }
 }
