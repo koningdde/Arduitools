@@ -101,7 +101,11 @@ void setup() {
   pinMode(relay2, OUTPUT);
   digitalWrite(relay1,LOW);
   digitalWrite(relay2,LOW);
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> origin/master
   setup_wifi();
   client.setServer(mqtt_server, 1883);
   client.setCallback(callback); 
@@ -229,7 +233,7 @@ void setup_wifi() {
   Serial.println();
   Serial.print("Connecting to ");
   Serial.println(ssid);
-
+  
   WiFi.begin(ssid, password);
 
   while (WiFi.status() != WL_CONNECTED) {
