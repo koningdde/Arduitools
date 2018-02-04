@@ -34,19 +34,17 @@ OneWire ds(14); //Dallas op pin
 
 const char* ssid = "Jupiter";
 const char* password = "3827310955370393";
-const char* mqtt_server = "192.168.100.54";
+const char* mqtt_server = "77.173.80.113";
 
-#define clientId "ESPWoon2"
-char unitId = '10'; //Unit id
-int idx1 = 999; //IDX number for domoticz
-int idx2 = 396; //IDX number for domoticz
+#define clientId "Serre"
+char unitId = '2'; //Unit id
+int idx1 = 314; //IDX number for domoticz
+int idx2 = 313; //IDX number for domoticz
 float data1 = 0.0; //Datapoint
 float data2 = 0;
 
 int relay1 = 15; //Hardwire output
 int led = 16;
-
-int val = 0; 
 uint16_t lux;
   
 unsigned long last;
