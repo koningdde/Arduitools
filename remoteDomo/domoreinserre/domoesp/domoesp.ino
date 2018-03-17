@@ -32,9 +32,9 @@
 BH1750 lightMeter;
 OneWire ds(14); //Dallas op pin
 
-const char* ssid = "Jupiter";
-const char* password = "3827310955370393";
-const char* mqtt_server = "77.173.80.113";
+const char* ssid = "Slangenpiraat";
+const char* password = "Hyundai1";
+const char* mqtt_server = "192.168.1.101";
 
 #define clientId "Serre"
 char unitId = '2'; //Unit id
