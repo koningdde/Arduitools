@@ -26,11 +26,13 @@
 #include <ESP8266WiFi.h>
 #include <PubSubClient.h>
 #include <OneWire.h> 
+#include <DallasTemperature.h>
 #include <Wire.h>
 #include <BH1750.h>
 
 BH1750 lightMeter;
 OneWire ds(14); //Dallas op pin
+DallasTemperature sensors(&ds);
 
 const char* ssid = "Slangenpiraat";
 const char* password = "Hyundai1";
@@ -49,6 +51,7 @@ uint16_t lux;
   
 unsigned long last;
 unsigned long interval = 300000; //Interval to send sensor data
+//unsigned long interval = 3000; //Interval to send sensor data
 
 WiFiClient espClient;
 PubSubClient client(espClient);
@@ -89,7 +92,7 @@ void loop() {
     
 }//end main loop
 
-void sensorDataout(int idx, float data, int data2){
+void sensorDataout(int idx, float data, float data2){
       Serial.println("Sending data....");
       String string = " { \"idx\" : ";
       string.concat(idx);
@@ -240,19 +243,9 @@ void reconnect() {
   }
 }
 
-int dallas(){
-  byte data[2];
-  ds.reset(); 
-  ds.write(0xCC);
-  ds.write(0x44);
-  delay(750);
-  ds.reset();
-  ds.write(0xCC);
-  ds.write(0xBE);
-  data[0] = ds.read(); 
-  data[1] = ds.read();
-  int Temp = (data[1]<<8)+data[0];
-  Temp = Temp>>4;
+float dallas(){
+  sensors.requestTemperatures();
+  float Temp = sensors.getTempCByIndex(0);
   return Temp;
  }
 
