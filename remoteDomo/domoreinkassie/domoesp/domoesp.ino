@@ -27,27 +27,31 @@
 #include <PubSubClient.h>
 #include <OneWire.h> 
 #include <DallasTemperature.h>
-#include <Wire.h>
-#include <BH1750.h>
+//#include <Wire.h>
+#include <dht.h>
+dht DHT;
+#define DHT11_PIN 13
 
-BH1750 lightMeter;
-OneWire ds(14); //Dallas op pin
+OneWire ds(12); //Dallas op pin
+OneWire ds1(14); //Dallas op pin
 DallasTemperature sensors(&ds);
+DallasTemperature sensors1(&ds1);
 
 const char* ssid = "Slangenpiraat";
 const char* password = "Hyundai1";
 const char* mqtt_server = "192.168.1.101";
 
-#define clientId "Serre"
-char unitId = '2'; //Unit id
-int idx1 = 314; //IDX number for domoticz
-int idx2 = 313; //IDX number for domoticz
+#define clientId "Tuinkas"
+char unitId = '4'; //Unit id
+int idx1 = 322; //IDX number for domoticz
+int idx2 = 323; //IDX number for domoticz
+int idx3 = 324; //IDX number for domoticz
 float data1 = 0.0; //Datapoint
 float data2 = 0.0;
+float data3 = 0.0;
 
 int relay1 = 15; //Hardwire output
-int led = 16;
-uint16_t lux;
+int led = 4;
   
 unsigned long last;
 //unsigned long interval = 300000; //Interval to send sensor data
@@ -65,14 +69,12 @@ void setup() {
   setup_wifi();
   client.setServer(mqtt_server, 1883);
   client.setCallback(callback); 
-  lightMeter.begin();
+  data1 = dallas();
+  data2 = dallas1();
+  delay(3000);
 }
 
 void loop() {
-
-  if (WiFi.status() != WL_CONNECTED) {
-  setup_wifi();
-}
 
   if (!client.connected()) {
     digitalWrite(led, LOW);
@@ -84,25 +86,24 @@ void loop() {
 
    if ((millis() - last) >= interval){ //To start sending sensordata
     data1 = dallas();
-    data2 = 0.0;
-    if (data1 < 70.0) {
-      sensorDataout(idx1, data1, data2);
-    }
-    lux = lightMeter.readLightLevel();
-    //Serial.print(lux);
-    sensorDataout(idx2, lux, 0);
+    data2 = dallas1();
+    int chk = DHT.read11(DHT11_PIN);
+    data3 = (DHT.humidity);
+    sensorDataout(idx1, data1, 0);
+    sensorDataout(idx2, data2, 0);
+    sensorDataoutN(idx3, data3);
+    Serial.println(data3);
+    //sensorDataout(idx2, 0, 0);
     last = millis(); 
     interval = 300000;  
   }
 
   //Read connected sensors
   //Reset loop
-  /*
   if (millis() > 21600000) // 6hr restart cyclus 
   {
     ESP.restart();
   }
-  */
     
 }//end main loop
 
@@ -123,6 +124,24 @@ void sensorDataout(int idx, float data, float data2){
       // ... and resubscribe
       client.subscribe("domoticz/arduino"); 
 }
+
+void sensorDataoutN(int idx, float data){
+      Serial.println("Sending data....");
+      String string = " { \"idx\" : ";
+      string.concat(idx);
+      string.concat(", \"nvalue\" : ");
+      string.concat(data);
+      string.concat(", \"svalue\" : \"0;0");
+      string.concat("\" \}");
+      Serial.println(string);
+      char output[80];
+      string.toCharArray(output, 80);
+      //char data2[] ={"\{\"command\": \"switchlight\", \"idx\": 14, \"switchcmd\": \"Off\", \"level\": 100\}"};
+      client.publish("domoticz/in",output);
+      // ... and resubscribe
+      client.subscribe("domoticz/arduino");
+}
+
 
 void relayOut(char relay, char state){  
   Serial.println("relais");
@@ -272,4 +291,9 @@ float dallas(){
   return Temp;
  }
 
+float dallas1(){
+  sensors1.requestTemperatures(); 
+  float Temp = sensors1.getTempCByIndex(0);
+  return Temp;
+ }
 

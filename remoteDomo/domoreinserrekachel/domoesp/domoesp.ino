@@ -27,27 +27,34 @@
 #include <PubSubClient.h>
 #include <OneWire.h> 
 #include <DallasTemperature.h>
-#include <Wire.h>
-#include <BH1750.h>
+//#include <Wire.h>
 
-BH1750 lightMeter;
-OneWire ds(14); //Dallas op pin
+OneWire ds(12); //Dallas op pin
+OneWire ds1(13); //Dallas op pin
+OneWire ds2(14); //Dallas op pin
+OneWire ds3(2); //Dallas op pin
 DallasTemperature sensors(&ds);
+DallasTemperature sensors1(&ds1);
+DallasTemperature sensors2(&ds2);
+DallasTemperature sensors3(&ds3);
 
 const char* ssid = "Slangenpiraat";
 const char* password = "Hyundai1";
 const char* mqtt_server = "192.168.1.101";
 
-#define clientId "Serre"
-char unitId = '2'; //Unit id
-int idx1 = 314; //IDX number for domoticz
-int idx2 = 313; //IDX number for domoticz
+#define clientId "SerreVerwarming"
+char unitId = '3'; //Unit id
+int idx1 = 318; //IDX number for domoticz
+int idx2 = 319; //IDX number for domoticz
+int idx3 = 320; //IDX number for domoticz
+int idx4 = 321; //IDX number for domoticz
 float data1 = 0.0; //Datapoint
 float data2 = 0.0;
+float data3 = 0.0;
+float data4 = 0.0;
 
 int relay1 = 15; //Hardwire output
-int led = 16;
-uint16_t lux;
+int led = 5;
   
 unsigned long last;
 //unsigned long interval = 300000; //Interval to send sensor data
@@ -57,7 +64,7 @@ WiFiClient espClient;
 PubSubClient client(espClient);
 
 void setup() {
-  pinMode(relay1, OUTPUT);
+  //pinMode(relay1, OUTPUT);
   pinMode(led, OUTPUT);
   digitalWrite(led, LOW);
   delay(2000);
@@ -65,14 +72,15 @@ void setup() {
   setup_wifi();
   client.setServer(mqtt_server, 1883);
   client.setCallback(callback); 
-  lightMeter.begin();
+  data1 = dallas();
+  data2 = dallas1();
+  data3 = dallas2();
+  data4 = dallas3();
+  delay(3000);
+
 }
 
 void loop() {
-
-  if (WiFi.status() != WL_CONNECTED) {
-  setup_wifi();
-}
 
   if (!client.connected()) {
     digitalWrite(led, LOW);
@@ -84,25 +92,23 @@ void loop() {
 
    if ((millis() - last) >= interval){ //To start sending sensordata
     data1 = dallas();
-    data2 = 0.0;
-    if (data1 < 70.0) {
-      sensorDataout(idx1, data1, data2);
-    }
-    lux = lightMeter.readLightLevel();
-    //Serial.print(lux);
-    sensorDataout(idx2, lux, 0);
+    data2 = dallas1();
+    data3 = dallas2();
+    data4 = dallas3();
+    sensorDataout(idx1, data1, 0);
+    sensorDataout(idx2, data2, 0);
+    sensorDataout(idx3, data3, 0);
+    sensorDataout(idx4, data4, 0);
     last = millis(); 
     interval = 300000;  
   }
 
   //Read connected sensors
   //Reset loop
-  /*
   if (millis() > 21600000) // 6hr restart cyclus 
   {
     ESP.restart();
   }
-  */
     
 }//end main loop
 
@@ -272,4 +278,20 @@ float dallas(){
   return Temp;
  }
 
+float dallas1(){
+  sensors1.requestTemperatures(); 
+  float Temp = sensors1.getTempCByIndex(0);
+  return Temp;
+ }
 
+ float dallas2(){
+  sensors2.requestTemperatures(); 
+  float Temp = sensors2.getTempCByIndex(0);
+  return Temp;
+ }
+
+float dallas3(){
+  sensors3.requestTemperatures(); 
+  float Temp = sensors3.getTempCByIndex(0);
+  return Temp;
+ }
