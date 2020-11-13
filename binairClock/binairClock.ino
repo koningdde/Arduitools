@@ -9,8 +9,8 @@ const unsigned long period = 1000;  //the value is a number of milliseconds
 //#define debug
 
 
-const char *ssid     = "Jupiter";
-const char *password = "3827310955370393";
+const char *ssid     = "SSID";
+const char *password = "PASSWORD";
 /*
 const char *ssid     = "AndroidAP2";
 const char *password = "12345678";
@@ -206,5 +206,3 @@ void showTemp(){
   shiftOut(dataPin, clockPin, tempOut);
   digitalWrite(latchPin, 1);
 }
-
-
